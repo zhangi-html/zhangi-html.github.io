@@ -362,6 +362,63 @@
     font-size: 0.75rem;
     color: var(--dim);
   }
+  .roll-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  .tooltip-content {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    max-width: 90vw;
+    background: var(--panel);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: var(--text);
+    text-align: left;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+    z-index: 10;
+  }
+  .tooltip-wrapper:hover .tooltip-content {
+    display: block;
+  }
+  .tooltip-content code {
+    background: #1a1410;
+    border: 1px solid #4a3b26;
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--accent-bright);
+    font-size: 0.85em;
+  }
+  .tooltip-content pre {
+    margin: 8px 0 0;
+    background: #1a1410;
+    border: 1px solid #4a3b26;
+    border-radius: 6px;
+    padding: 8px 10px;
+    overflow-x: auto;
+  }
+  .tooltip-content pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--dim);
+    font-size: 0.72rem;
+    white-space: pre;
+  }
   .io-row {
     margin-top: 22px;
     display: flex;
@@ -446,7 +503,21 @@
 
 
 
-<button id="rollBtn">Roll Stats</button>
+<div class="roll-row">
+  <button id="rollBtn">Roll Stats</button>
+  <span class="tooltip-wrapper">
+    <button id="importRollsBtn">Import Rolls</button>
+    <div class="tooltip-content">
+      Run <code>!threshold</code> in my Discord server and copy the stats, then click this button. It should look like:
+      <pre><code>Stat 1: 4d6kh3 (1, 3, 2, 6) = 11
+Stat 2: 4d6kh3 (4, 1, 5, 2) = 11
+Stat 3: 4d6kh3 (2, 3, 5, 5) = 13
+Stat 4: 4d6kh3 (1, 4, 2, 1) = 7
+Stat 5: 4d6kh3 (5, 6, 5, 6) = 17
+Stat 6: 4d6kh3 (6, 2, 3, 3) = 12</code></pre>
+    </div>
+  </span>
+</div>
 <div class="status" id="status"></div>
 
 <div class="board" id="board"></div>
@@ -743,6 +814,82 @@ document.getElementById('rollBtn').addEventListener('click', () => {
     status.textContent = '';
     btn.disabled = false;
   }, 50);
+});
+
+// Parses lines like: "Stat 1: 4d6kh3 (1, 3, 2, 6) = 11"
+// kh3 = keep highest 3 of 4, which is the same as our "drop the lowest die" rule.
+function parseRollImport(text) {
+  const lineRegex = /Stat\s*(\d+)\s*:\s*4d6kh3\s*\(([^)]+)\)\s*=\s*(\d+)/gi;
+  const matches = [...text.matchAll(lineRegex)];
+  if (matches.length !== 6) {
+    throw new Error(`Expected 6 "Stat N: 4d6kh3 (...) = ..." lines, found ${matches.length}.`);
+  }
+
+  matches.sort((a, b) => parseInt(a[1], 10) - parseInt(b[1], 10));
+
+  const seen = new Set();
+  const stats = matches.map(m => {
+    const statNum = parseInt(m[1], 10);
+    if (seen.has(statNum)) throw new Error(`Stat ${statNum} appears more than once.`);
+    seen.add(statNum);
+
+    const dice = m[2].split(',').map(s => parseInt(s.trim(), 10));
+    if (dice.length !== 4) {
+      throw new Error(`Stat ${statNum} should have 4 dice, found ${dice.length}.`);
+    }
+    dice.forEach(d => {
+      if (!Number.isInteger(d) || d < 1 || d > 6) {
+        throw new Error(`Stat ${statNum} has an invalid die value (must be 1-6).`);
+      }
+    });
+
+    let droppedIndex = 0;
+    for (let i = 1; i < dice.length; i++) {
+      if (dice[i] < dice[droppedIndex]) droppedIndex = i;
+    }
+    const dropped = dice[droppedIndex];
+    let total = dice.reduce((sum, v, i) => (i === droppedIndex ? sum : sum + v), 0);
+
+    const declared = parseInt(m[3], 10);
+    if (total !== declared) {
+      throw new Error(`Stat ${statNum} doesn't check out: dropping the lowest die gives ${total}, not the declared ${declared}.`);
+    }
+
+    return { rolls: dice, dropped, droppedIndex, total };
+  });
+
+  if (seen.size !== 6 || Math.min(...seen) !== 1 || Math.max(...seen) !== 6) {
+    throw new Error('Stat numbers should be exactly 1 through 6.');
+  }
+
+  return stats;
+}
+
+document.getElementById('importRollsBtn').addEventListener('click', async () => {
+  const status = document.getElementById('status');
+  let text = null;
+  try {
+    text = await navigator.clipboard.readText();
+  } catch (err) {
+    text = window.prompt('Clipboard read was blocked. Paste your dice roll output here:');
+  }
+  if (!text) {
+    status.textContent = 'No text to import.';
+    return;
+  }
+  try {
+    const stats = parseRollImport(text);
+    const pointTotal = stats.reduce((sum, s) => sum + pointValue(s.total), 0);
+    currentStats = {
+      stats: stats.map(s => ({ ...s, current: s.total })),
+      pointTotal,
+      attempts: 0
+    };
+    renderBoard();
+    status.textContent = 'Imported rolls successfully.';
+  } catch (err) {
+    status.textContent = 'Import failed: ' + err.message;
+  }
 });
 
 function setIoStatus(message, kind) {
