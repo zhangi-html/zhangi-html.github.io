@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>zhangi-html</title>
+<style>
+  :root {
+    --bg: #141820;
+    --panel: #1e2430;
+    --accent: #6b8cae;
+    --accent-bright: #8fb4d9;
+    --text: #e4e8ef;
+    --dim: #8a93a3;
+    --border: #2f3848;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at top, #1a2230 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    padding: 32px 20px 48px;
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  h1 {
+    margin: 0 0 6px;
+    font-size: 1.75rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+  .intro {
+    margin: 0 0 28px;
+    color: var(--dim);
+    font-size: 0.95rem;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+  }
+  li a {
+    display: block;
+    padding: 16px 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  li a:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .page-title {
+    display: block;
+    font-weight: 600;
+    color: var(--accent-bright);
+    margin-bottom: 4px;
+  }
+  .page-desc {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--dim);
+  }
+  footer {
+    margin-top: 32px;
+    font-size: 0.8rem;
+    color: var(--dim);
+  }
+  footer a {
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Published pages</h1>
+  <p class="intro">Static HTML hosted on GitHub Pages. Add new entries to the list below when you publish another page in the repo root.</p>
+  <ul id="pages"></ul>
+  <footer>
+    <a href="https://github.com/zhangi-html/zhangi-html.github.io">Source on GitHub</a>
+  </footer>
+</main>
+<script>
+  const pages = [
+    {
+      href: 'dnd-stat-roller.html',
+      title: '5e Stat Roller',
+      description: 'Roll 4d6 drop lowest, then point-buy within a budget of 35.'
+    }
+  ];
+
+  const list = document.getElementById('pages');
+  for (const page of pages) {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = page.href;
+    a.innerHTML =
+      '<span class="page-title">' + page.title + '</span>' +
+      '<span class="page-desc">' + page.description + '</span>';
+    li.appendChild(a);
+    list.appendChild(li);
+  }
+</script>
+</body>
+</html>
