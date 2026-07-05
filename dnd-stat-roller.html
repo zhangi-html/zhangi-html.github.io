@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>5e Stat Roller</title>
+<style>
+  :root {
+    --bg: #1a1410;
+    --panel: #2a2117;
+    --accent: #b8863b;
+    --accent-bright: #e0a94f;
+    --text: #e8ddc8;
+    --dim: #9a8b6f;
+    --good: #6b9e5e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at top, #2e2417 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: 'Georgia', 'Palatino Linotype', serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 20px;
+  }
+  h1 {
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    color: var(--accent-bright);
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    color: var(--dim);
+    font-size: 0.8rem;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  .explainer {
+    max-width: 560px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text);
+    text-align: left;
+    background: var(--panel);
+    border: 1px solid #4a3b26;
+    border-radius: 8px;
+    padding: 14px 20px;
+    margin-bottom: 12px;
+  }
+  .explainer ol {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .explainer ol > li {
+    margin-bottom: 8px;
+  }
+  .explainer ol > li:last-child {
+    margin-bottom: 0;
+  }
+  .explainer ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+    color: var(--dim);
+  }
+  .explainer ul li {
+    margin-bottom: 4px;
+  }
+  .explainer ul li:last-child {
+    margin-bottom: 0;
+  }
+  .explainer li::marker {
+    color: var(--accent-bright);
+  }
+  .philosophy {
+    max-width: 560px;
+    width: 100%;
+    margin-bottom: 20px;
+    background: var(--panel);
+    border: 1px solid #4a3b26;
+    border-radius: 8px;
+    padding: 4px 16px;
+  }
+  .philosophy summary {
+    cursor: pointer;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    color: var(--accent-bright);
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  .philosophy-body {
+    font-size: 0.83rem;
+    line-height: 1.5;
+    color: var(--dim);
+    padding-bottom: 12px;
+  }
+  .philosophy-body p {
+    margin: 0 0 6px;
+    color: var(--text);
+    font-weight: bold;
+  }
+  .philosophy-body ul {
+    margin: 0 0 14px;
+    padding-left: 18px;
+  }
+  .philosophy-body ul:last-child {
+    margin-bottom: 0;
+  }
+  .philosophy-body li {
+    margin-bottom: 8px;
+  }
+  .philosophy-body li:last-child {
+    margin-bottom: 0;
+  }
+  .philosophy-body li::marker {
+    color: var(--accent-bright);
+  }
+  .philosophy-body li ul {
+    margin: 6px 0 0;
+    padding-left: 16px;
+  }
+  .philosophy-body li ul li {
+    margin-bottom: 0;
+    font-size: 0.95em;
+  }
+  .philosophy-body li ul li::marker {
+    color: var(--dim);
+  }
+  .philosophy-body em {
+    color: var(--text);
+  }
+  button {
+    background: linear-gradient(180deg, var(--accent-bright), var(--accent));
+    color: #1a1410;
+    border: none;
+    padding: 14px 32px;
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #6e4d1f, 0 4px 8px rgba(0,0,0,0.4);
+    transition: transform 0.08s ease;
+  }
+  button:active { transform: translateY(2px); box-shadow: 0 1px 0 #6e4d1f; }
+  button:disabled { opacity: 0.6; cursor: default; }
+
+  .status {
+    margin-top: 16px;
+    color: var(--dim);
+    font-size: 0.85rem;
+    min-height: 1.2em;
+  }
+
+  .board {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 640px;
+  }
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid #4a3b26;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    position: relative;
+    cursor: grab;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .stat-card.dragging {
+    opacity: 0.4;
+    cursor: grabbing;
+  }
+  .stat-card.drag-over {
+    border-color: var(--accent-bright);
+    transform: scale(1.03);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.3), 0 0 12px rgba(224,169,79,0.5);
+  }
+  .stat-card.increased {
+    border: 2px solid var(--good);
+    background: linear-gradient(180deg, #22331d, var(--panel));
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.3), 0 0 14px rgba(107,158,94,0.35);
+  }
+  .stat-card.decreased {
+    border: 2px solid #d9534f;
+    background: linear-gradient(180deg, #3a1d1c, var(--panel));
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.3), 0 0 14px rgba(217,83,79,0.35);
+  }
+  .modified-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    color: #1a1410;
+    font-size: 0.6rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  }
+  .modified-badge.increased {
+    background: var(--good);
+  }
+  .modified-badge.decreased {
+    background: #d9534f;
+  }
+  .stat-name {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .stat-value {
+    font-size: 2.4rem;
+    color: var(--accent-bright);
+    font-weight: bold;
+    margin: 4px 0;
+  }
+  .stat-mod {
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+  .stat-detail {
+    margin-top: 6px;
+    font-size: 0.7rem;
+    color: var(--dim);
+  }
+
+  .summary {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+  .summary .total {
+    color: var(--good);
+    font-weight: bold;
+  }
+  .summary .total.warning {
+    color: #d9534f;
+  }
+  .summary .remaining {
+    color: var(--accent-bright);
+    font-weight: bold;
+  }
+  .stat-buttons {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+  .stat-buttons button {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    box-shadow: 0 2px 0 #6e4d1f, 0 3px 6px rgba(0,0,0,0.35);
+  }
+  .stat-buttons button:disabled {
+    background: #4a3b26;
+    color: var(--dim);
+    box-shadow: none;
+  }
+  .stat-cost {
+    margin-top: 4px;
+    font-size: 0.65rem;
+    color: var(--dim);
+  }
+  .big-counters {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 4px 0 10px;
+    flex-wrap: wrap;
+  }
+  .counter-pair {
+    display: flex;
+    gap: 10px;
+  }
+  .counter-box {
+    background: var(--panel);
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 6px 16px;
+    min-width: 70px;
+    text-align: center;
+    box-shadow: inset 0 0 16px rgba(0,0,0,0.35);
+  }
+  .counter-value {
+    font-size: 2.2rem;
+    font-weight: bold;
+    line-height: 1;
+    color: var(--accent-bright);
+  }
+  .counter-label {
+    margin-top: 2px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .status-row {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 2px;
+  }
+  .modified-counter {
+    font-size: 0.95rem;
+  }
+  .modified-counter span {
+    color: var(--accent-bright);
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  .modified-counter.warning span {
+    color: #d9534f;
+  }
+  .warning-text {
+    color: #d9534f;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+  .reset {
+    margin-top: 6px;
+    display: block;
+    width: 100%;
+    padding: 3px 0;
+    font-size: 0.7rem;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent-bright);
+    box-shadow: none;
+  }
+  .reset:disabled {
+    border-color: #4a3b26;
+    color: var(--dim);
+    background: transparent;
+  }
+  .tier-note {
+    font-size: 0.7rem;
+    color: var(--dim);
+    margin-bottom: 6px;
+  }
+  .point-buy-section {
+    font-size: 0.95rem;
+  }
+
+  .attempts {
+    margin-top: 4px;
+    font-size: 0.75rem;
+    color: var(--dim);
+  }
+  .io-row {
+    margin-top: 22px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .io-btn {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent-bright);
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    box-shadow: none;
+  }
+  .io-btn:active {
+    transform: translateY(1px);
+  }
+  .io-status {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--dim);
+    min-height: 1.2em;
+    text-align: center;
+  }
+  .io-status.error {
+    color: #d9534f;
+  }
+  .io-status.success {
+    color: var(--good);
+  }
+</style>
+</head>
+<body>
+
+<h1>Ability Score Roller</h1>
+<div class="subtitle">4d6 drop lowest &middot; six stats &middot; point-buy total of 35 or less, with leftover points to spend</div>
+
+<div class="explainer">
+  <ol>
+    <li>Roll 4d6, dropping the lowest, six times.</li>
+    <li>Convert each roll to its point-buy value and sum all six. If the total is over 35, reroll the whole set.</li>
+    <li>From there, use point buy (up to a budget of 35) to raise or lower your scores. Rules:
+      <ul>
+        <li>Scores can be modified from 6 to 18.</li>
+        <li>Bumping a stat up to 16 or higher requires an equal or greater number of stats at 8 or lower.</li>
+        <li>Bumping a stat up to 18 requires an equal or greater number of stats at 6 or lower.</li>
+        <li>At most 3 stats should be modified from their rolled values.</li>
+        <li>Rolled distributions can break the 16/8 and 18/6 balance; changing them through point buy can't.</li>
+        <li>Naturally rolled scores below 6 can be kept, and modified as desired, within the other existing requirements.</li>
+      </ul>
+    </li>
+    <li>Drag a stat card onto another to swap which roll fills which slot.</li>
+  </ol>
+</div>
+
+<details class="philosophy">
+  <summary>Thoughts</summary>
+  <div class="philosophy-body">
+    <p>Goals, from the start:</p>
+    <ul>
+      <li>Start with the standard array (15 14 13 12 10 8) and the alternate array (16 14 13 12 10 6), which is slightly stronger.</li>
+      <li>Add choice for randomness without introducing raw power.
+        <ul>
+          <li>I'm okay with "technically equivalently powerful" but otherwise unobtainable by the standard or alternate arrays.</li>
+        </ul>
+      </li>
+      <li>You can choose the standard or alternate array with lineage ASIs instead of this system.</li>
+      <li>A level 1 PC should start with at most an 18.</li>
+    </ul>
+    <p>Conclusions:</p>
+    <ul>
+      <li>The standard array plus lineage ASIs (15 14 13 12 10 8) plus +2/+1 or +1/+1/+1 reaches +3/+3/+1 or +3/+2/+2 (equivalent to 35 point buy).</li>
+      <li>The ASI is built into the point buy, by balancing around the value after ASI application &mdash; that happens to also solve the problem of reaching higher than 18.</li>
+      <li>The alternate array reaches +4/+2/+2 or +3/+3/+2, but only at the cost of an extra -2 somewhere else in the array.</li>
+      <li>Modifying at most 3 stats mirrors the randomness and limited tweaking from rolling dice.</li>
+      <li>+3 should come at the cost of a -1, and +4 should come at the cost of a -2.</li>
+      <li>Rolling lets you have more +3s or +4s than normal &mdash; and if you're lucky, you could roll an 18 without needing a 6, or a 16 without needing any 8s.</li>
+    </ul>
+  </div>
+</details>
+
+
+
+<button id="rollBtn">Roll Stats</button>
+<div class="status" id="status"></div>
+
+<div class="board" id="board"></div>
+<div class="summary" id="summary"></div>
+
+<div class="io-row">
+  <button id="exportBtn" class="io-btn">Export</button>
+  <button id="importBtn" class="io-btn">Import</button>
+</div>
+<div class="io-status" id="ioStatus"></div>
+
+<script>
+const POINT_VALUES = {
+  18: 19, 17: 15, 16: 12, 15: 9, 14: 7, 13: 5, 12: 4, 11: 3,
+  10: 2, 9: 1, 8: 0, 7: -1, 6: -2, 5: -4, 4: -6, 3: -9
+};
+const STAT_NAMES = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
+const TARGET_TOTAL = 35;
+const MIN_SCORE = 6;
+const MAX_SCORE = 18;
+const MAX_ATTEMPTS = 200000;
+
+let currentStats = null; // holds live state while improving with leftover points
+
+// Bumping stats up to 16+ or 18 requires an equal or greater number of
+// stats sitting at 8-or-lower / 6-or-lower, respectively. Naturally rolled
+// 16s, 17s, and 18s don't count against this — only stats pushed above
+// their rolled value via point buy do.
+const MAX_MODIFIED = 3;
+
+function modifiedCount(stats) {
+  return stats.filter(s => s.current !== s.total).length;
+}
+
+function bumpedToAtLeast(stats, threshold) {
+  return stats.filter(s => s.total < threshold && s.current >= threshold).length;
+}
+
+function companionsAtOrBelow(stats, ceiling) {
+  return stats.filter(s => s.current <= ceiling).length;
+}
+
+function tiersSatisfied(stats) {
+  return bumpedToAtLeast(stats, 16) <= companionsAtOrBelow(stats, 8) &&
+         bumpedToAtLeast(stats, 18) <= companionsAtOrBelow(stats, 6);
+}
+
+function rollDie() {
+  return Math.floor(Math.random() * 6) + 1;
+}
+
+function rollStat() {
+  const rolls = [rollDie(), rollDie(), rollDie(), rollDie()];
+  let droppedIndex = 0;
+  for (let i = 1; i < rolls.length; i++) {
+    if (rolls[i] < rolls[droppedIndex]) droppedIndex = i;
+  }
+  const dropped = rolls[droppedIndex];
+  let total = rolls.reduce((sum, v, i) => (i === droppedIndex ? sum : sum + v), 0);
+  if (total === 18) total = 17; // 18s are capped down to 17 on the raw roll
+  return { rolls, dropped, droppedIndex, total };
+}
+
+function pointValue(total) {
+  return POINT_VALUES[total];
+}
+
+function modifier(score) {
+  const mod = Math.floor((score - 10) / 2);
+  return mod >= 0 ? `+${mod}` : `${mod}`;
+}
+
+function generateStatSet() {
+  const stats = [];
+  for (let i = 0; i < 6; i++) {
+    stats.push(rollStat());
+  }
+  const pointTotal = stats.reduce((sum, s) => sum + pointValue(s.total), 0);
+  return { stats, pointTotal };
+}
+
+function rollUntilValid() {
+  let attempts = 0;
+  let result;
+  do {
+    result = generateStatSet();
+    attempts++;
+  } while (result.pointTotal > TARGET_TOTAL && attempts < MAX_ATTEMPTS);
+  return { result, attempts };
+}
+
+let dragSourceIndex = null;
+
+function handleDragStart(e) {
+  dragSourceIndex = parseInt(this.dataset.i, 10);
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', String(dragSourceIndex));
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  if (parseInt(this.dataset.i, 10) !== dragSourceIndex) {
+    this.classList.add('drag-over');
+  }
+}
+
+function handleDragLeave() {
+  this.classList.remove('drag-over');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  this.classList.remove('drag-over');
+  const targetIndex = parseInt(this.dataset.i, 10);
+  if (dragSourceIndex === null || targetIndex === dragSourceIndex) return;
+
+  const stats = currentStats.stats;
+  [stats[dragSourceIndex], stats[targetIndex]] = [stats[targetIndex], stats[dragSourceIndex]];
+  dragSourceIndex = null;
+  renderBoard();
+}
+
+function handleDragEnd() {
+  this.classList.remove('dragging');
+  document.querySelectorAll('.stat-card.drag-over').forEach(el => el.classList.remove('drag-over'));
+  dragSourceIndex = null;
+}
+
+function spentPoints(stats) {
+  return stats.reduce((sum, s) => sum + pointValue(s.current), 0);
+}
+
+function increaseStat(index) {
+  const stat = currentStats.stats[index];
+  const next = stat.current + 1;
+  if (next > MAX_SCORE) return;
+
+  const simulated = currentStats.stats.map((s, i) => i === index ? { ...s, current: next } : s);
+  if (!tiersSatisfied(simulated)) return;
+
+  stat.current = next;
+  renderBoard();
+}
+
+function decreaseStat(index) {
+  const stat = currentStats.stats[index];
+  if (stat.current <= MIN_SCORE) return;
+  stat.current -= 1;
+  renderBoard();
+}
+
+function resetStat(index) {
+  const stat = currentStats.stats[index];
+  stat.current = stat.total;
+  renderBoard();
+}
+
+function countAtMost(stats, value) {
+  return stats.filter(s => s.current <= value).length;
+}
+
+function countAtLeast(stats, value) {
+  return stats.filter(s => s.current >= value).length;
+}
+
+function renderBoard() {
+  const board = document.getElementById('board');
+  const summary = document.getElementById('summary');
+  const remaining = TARGET_TOTAL - spentPoints(currentStats.stats);
+
+  board.innerHTML = '';
+  currentStats.stats.forEach((s, i) => {
+    const next = s.current + 1;
+    const simulated = currentStats.stats.map((st, idx) => idx === i ? { ...st, current: next } : st);
+    const meetsRequirement = next > MAX_SCORE || tiersSatisfied(simulated);
+    const nextCost = next <= MAX_SCORE ? pointValue(next) - pointValue(s.current) : null;
+    const canIncrease = next <= MAX_SCORE && meetsRequirement;
+    const canDecrease = s.current > MIN_SCORE;
+    const isModified = s.current !== s.total;
+    const direction = s.current > s.total ? 'increased' : s.current < s.total ? 'decreased' : '';
+
+    let costLabel;
+    if (next > MAX_SCORE) {
+      costLabel = 'at maximum';
+    } else if (!meetsRequirement) {
+      const deficit16 = bumpedToAtLeast(simulated, 16) - companionsAtOrBelow(simulated, 8);
+      const deficit18 = bumpedToAtLeast(simulated, 18) - companionsAtOrBelow(simulated, 6);
+      if (deficit18 > 0) {
+        costLabel = `needs ${deficit18} more stat${deficit18 > 1 ? 's' : ''} at 6 or lower`;
+      } else {
+        costLabel = `needs ${deficit16} more stat${deficit16 > 1 ? 's' : ''} at 8 or lower`;
+      }
+    } else {
+      costLabel = `next: ${nextCost} pt${nextCost === 1 ? '' : 's'}`;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'stat-card' + (isModified ? ' ' + direction : '');
+    card.draggable = true;
+    card.dataset.i = i;
+    card.innerHTML = `
+      ${isModified ? `<div class="modified-badge ${direction}">${direction === 'increased' ? 'Increased' : 'Decreased'}</div>` : ''}
+      <div class="stat-name">${STAT_NAMES[i]}</div>
+      <div class="stat-value">${s.current}</div>
+      <div class="stat-mod">mod ${modifier(s.current)}</div>
+      <div class="stat-detail">${s.rolls.map((r, di) => di === s.droppedIndex ? `<s>${r}</s>` : r).join(' ')} = ${s.total}</div>
+      <div class="stat-buttons">
+        <button class="dec" data-i="${i}" ${canDecrease ? '' : 'disabled'}>&minus;</button>
+        <button class="inc" data-i="${i}" ${canIncrease ? '' : 'disabled'}>+</button>
+      </div>
+      <div class="stat-cost">${costLabel}</div>
+      <button class="reset" data-i="${i}" ${isModified ? '' : 'disabled'}>Reset</button>
+    `;
+    board.appendChild(card);
+  });
+
+  board.querySelectorAll('.stat-card').forEach(card => {
+    card.addEventListener('dragstart', handleDragStart);
+    card.addEventListener('dragover', handleDragOver);
+    card.addEventListener('dragleave', handleDragLeave);
+    card.addEventListener('drop', handleDrop);
+    card.addEventListener('dragend', handleDragEnd);
+  });
+
+  board.querySelectorAll('.inc').forEach(btn => {
+    btn.addEventListener('click', () => increaseStat(parseInt(btn.dataset.i, 10)));
+  });
+  board.querySelectorAll('.dec').forEach(btn => {
+    btn.addEventListener('click', () => decreaseStat(parseInt(btn.dataset.i, 10)));
+  });
+  board.querySelectorAll('.reset').forEach(btn => {
+    btn.addEventListener('click', () => resetStat(parseInt(btn.dataset.i, 10)));
+  });
+
+  summary.innerHTML = `
+    <div class="big-counters">
+      <div class="counter-pair">
+        <div class="counter-box">
+          <div class="counter-value">${countAtLeast(currentStats.stats, 16)}</div>
+          <div class="counter-label">&ge; 16</div>
+        </div>
+        <div class="counter-box">
+          <div class="counter-value">${countAtMost(currentStats.stats, 8)}</div>
+          <div class="counter-label">&le; 8</div>
+        </div>
+      </div>
+      <div class="counter-pair">
+        <div class="counter-box">
+          <div class="counter-value">${countAtLeast(currentStats.stats, 18)}</div>
+          <div class="counter-label">&ge; 18</div>
+        </div>
+        <div class="counter-box">
+          <div class="counter-value">${countAtMost(currentStats.stats, 6)}</div>
+          <div class="counter-label">&le; 6</div>
+        </div>
+      </div>
+    </div>
+    <div class="tier-note">16 requires a companion stat at 8 or lower &middot; 18 requires one at 6 or lower</div>
+
+    <div class="status-row">
+      <span class="modified-counter${modifiedCount(currentStats.stats) > MAX_MODIFIED ? ' warning' : ''}">
+        Stats modified: <span>${modifiedCount(currentStats.stats)}</span> / ${MAX_MODIFIED}
+      </span>
+      <span class="point-buy-section">
+        Point-buy total: <span class="total${spentPoints(currentStats.stats) > TARGET_TOTAL ? ' warning' : ''}">${spentPoints(currentStats.stats)}</span> / ${TARGET_TOTAL}
+        <span style="font-size:0.8rem; color: var(--dim);">(as rolled: ${currentStats.pointTotal})</span>
+      </span>
+    </div>
+    ${(modifiedCount(currentStats.stats) > MAX_MODIFIED || spentPoints(currentStats.stats) > TARGET_TOTAL) ? `
+    <div class="warning-text">
+      ${modifiedCount(currentStats.stats) > MAX_MODIFIED ? '&#9888; more stats modified than allowed &nbsp; ' : ''}
+      ${spentPoints(currentStats.stats) > TARGET_TOTAL ? '&#9888; over budget' : ''}
+    </div>` : ''}
+    <div class="attempts">found in ${currentStats.attempts} attempt${currentStats.attempts === 1 ? '' : 's'}</div>
+  `;
+}
+
+document.getElementById('rollBtn').addEventListener('click', () => {
+  const btn = document.getElementById('rollBtn');
+  const status = document.getElementById('status');
+  btn.disabled = true;
+  status.textContent = 'Rolling...';
+
+  setTimeout(() => {
+    const { result, attempts } = rollUntilValid();
+    currentStats = {
+      stats: result.stats.map(s => ({ ...s, current: s.total })),
+      pointTotal: result.pointTotal,
+      attempts
+    };
+    renderBoard();
+    status.textContent = '';
+    btn.disabled = false;
+  }, 50);
+});
+
+function setIoStatus(message, kind) {
+  const el = document.getElementById('ioStatus');
+  el.textContent = message;
+  el.className = 'io-status' + (kind ? ' ' + kind : '');
+}
+
+function serializeState() {
+  return JSON.stringify({
+    version: 1,
+    stats: currentStats.stats,
+    pointTotal: currentStats.pointTotal,
+    attempts: currentStats.attempts
+  });
+}
+
+function applyImportedState(text) {
+  const parsed = JSON.parse(text);
+  if (!parsed || !Array.isArray(parsed.stats) || parsed.stats.length !== 6) {
+    throw new Error('Missing or malformed "stats" array (expected 6 entries).');
+  }
+  parsed.stats.forEach((s, i) => {
+    if (typeof s.current !== 'number' || typeof s.total !== 'number' ||
+        !Array.isArray(s.rolls) || typeof s.droppedIndex !== 'number') {
+      throw new Error(`Stat #${i + 1} is missing required fields.`);
+    }
+  });
+  currentStats = {
+    stats: parsed.stats,
+    pointTotal: typeof parsed.pointTotal === 'number' ? parsed.pointTotal : spentPoints(parsed.stats),
+    attempts: typeof parsed.attempts === 'number' ? parsed.attempts : 0
+  };
+  renderBoard();
+}
+
+document.getElementById('exportBtn').addEventListener('click', async () => {
+  if (!currentStats) {
+    setIoStatus('Roll stats before exporting.', 'error');
+    return;
+  }
+  const text = serializeState();
+  try {
+    await navigator.clipboard.writeText(text);
+    setIoStatus('Copied current state to clipboard.', 'success');
+  } catch (err) {
+    // Clipboard API blocked — fall back to a manual copy prompt.
+    window.prompt('Copy this text (clipboard access was blocked):', text);
+    setIoStatus('Clipboard blocked — copy the text from the prompt.', 'error');
+  }
+});
+
+document.getElementById('importBtn').addEventListener('click', async () => {
+  let text = null;
+  try {
+    text = await navigator.clipboard.readText();
+  } catch (err) {
+    text = window.prompt('Clipboard read was blocked. Paste the exported state here:');
+  }
+  if (!text) {
+    setIoStatus('No text to import.', 'error');
+    return;
+  }
+  try {
+    applyImportedState(text);
+    setIoStatus('Imported state successfully.', 'success');
+  } catch (err) {
+    setIoStatus('Import failed: ' + err.message, 'error');
+  }
+});
+</script>
+
+</body>
+</html>
