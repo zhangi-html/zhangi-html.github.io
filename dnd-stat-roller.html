@@ -78,6 +78,33 @@
     margin: 0 0 16px;
     line-height: 1.4;
   }
+  .pv-target-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: #1a1410;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 14px;
+  }
+  .pv-target-row label {
+    font-size: 0.85rem;
+    color: var(--accent-bright);
+    font-weight: bold;
+  }
+  .pv-target-row input {
+    width: 80px;
+    background: var(--panel);
+    border: 1px solid #4a3b26;
+    color: var(--text);
+    border-radius: 4px;
+    padding: 5px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-family: inherit;
+  }
   .pv-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -568,12 +595,16 @@
 <button id="settingsBtn" class="settings-btn" title="Point-buy value settings">&#9881;</button>
 
 <h1>Ability Score Roller</h1>
-<div class="subtitle">4d6 drop lowest &middot; six stats &middot; point-buy total of 35 or less, with leftover points to spend</div>
+<div class="subtitle">4d6 drop lowest &middot; six stats &middot; point-buy total of <span class="target-total-value">35</span> or less, with leftover points to spend</div>
 
 <div class="modal-overlay" id="settingsOverlay">
   <div class="modal-box">
     <h2>Point-Buy Values</h2>
-    <p class="modal-desc">The point-buy cost for each score, 3 through 18. Changes apply to point totals and the point-buy budget everywhere on this page.</p>
+    <p class="modal-desc">The point-buy cost for each score, 3 through 18, plus the overall budget. Changes apply everywhere on this page.</p>
+    <div class="pv-target-row">
+      <label for="pvTargetTotal">Point-Buy Total</label>
+      <input type="text" inputmode="numeric" id="pvTargetTotal">
+    </div>
     <div class="pv-grid" id="pvGrid"></div>
     <div class="modal-actions">
       <button id="pvResetBtn" class="io-btn">Reset to Defaults</button>
@@ -587,8 +618,8 @@
 <div class="explainer">
   <ol>
     <li>Roll 4d6, dropping the lowest, six times.</li>
-    <li>Convert each roll to its point-buy value and sum all six. If the total is over 35, reroll the whole set.</li>
-    <li>From there, use point buy (up to a budget of 35) to raise or lower your scores. Rules:
+    <li>Convert each roll to its point-buy value and sum all six. If the total is over <span class="target-total-value">35</span>, reroll the whole set.</li>
+    <li>From there, use point buy (up to a budget of <span class="target-total-value">35</span>) to raise or lower your scores. Rules:
       <ul>
         <li>Scores can be modified from 6 to 18.</li>
         <li>Bumping a stat up to 16 or higher requires an equal or greater number of stats at 8 or lower.</li>
@@ -664,7 +695,8 @@ const DEFAULT_POINT_VALUES = {
 };
 let POINT_VALUES = { ...DEFAULT_POINT_VALUES };
 const STAT_NAMES = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
-const TARGET_TOTAL = 35;
+const DEFAULT_TARGET_TOTAL = 38;
+let TARGET_TOTAL = DEFAULT_TARGET_TOTAL;
 const MIN_SCORE = 6;
 const MAX_SCORE = 18;
 const MAX_ATTEMPTS = 200000;
@@ -718,9 +750,9 @@ function modifier(score) {
   return mod >= 0 ? `+${mod}` : `${mod}`;
 }
 
-// --- Point-buy value settings modal ---
+// --- Point-buy value & budget settings modal ---
 
-const PV_STORAGE_KEY = 'pointBuyValues';
+const PV_STORAGE_KEY = 'pointBuyConfig';
 
 function buildPvGrid(values) {
   const grid = document.getElementById('pvGrid');
@@ -742,6 +774,14 @@ function setPvStatus(message, kind) {
   el.className = 'modal-status' + (kind ? ' ' + kind : '');
 }
 
+function updateTargetTotalDisplays() {
+  document.querySelectorAll('.target-total-value').forEach(el => {
+    el.textContent = TARGET_TOTAL;
+  });
+  const input = document.getElementById('pvTargetTotal');
+  if (input) input.value = TARGET_TOTAL;
+}
+
 function readPvGridValues() {
   const result = {};
   for (let score = 18; score >= 3; score--) {
@@ -755,25 +795,42 @@ function readPvGridValues() {
   return result;
 }
 
+function readTargetTotal() {
+  const input = document.getElementById('pvTargetTotal');
+  const val = parseInt(input.value, 10);
+  if (!Number.isFinite(val) || val <= 0) {
+    throw new Error('Point-buy total needs a positive whole number.');
+  }
+  return val;
+}
+
 async function loadStoredPointValues() {
   try {
     const res = await window.storage.get(PV_STORAGE_KEY, false);
     if (res && res.value) {
       const parsed = JSON.parse(res.value);
-      const merged = { ...DEFAULT_POINT_VALUES, ...parsed };
-      POINT_VALUES = merged;
+      if (parsed.pointValues) {
+        POINT_VALUES = { ...DEFAULT_POINT_VALUES, ...parsed.pointValues };
+      }
+      if (Number.isFinite(parsed.targetTotal)) {
+        TARGET_TOTAL = parsed.targetTotal;
+      }
     }
   } catch (err) {
     // No saved values yet, or storage unavailable — fall back to defaults silently.
   }
   buildPvGrid(POINT_VALUES);
+  updateTargetTotalDisplays();
 }
 
 async function savePointValues() {
   try {
     const values = readPvGridValues();
+    const target = readTargetTotal();
     POINT_VALUES = values;
-    await window.storage.set(PV_STORAGE_KEY, JSON.stringify(values), false);
+    TARGET_TOTAL = target;
+    await window.storage.set(PV_STORAGE_KEY, JSON.stringify({ pointValues: values, targetTotal: target }), false);
+    updateTargetTotalDisplays();
     setPvStatus('Saved. These values will persist for next time.', 'success');
     if (currentStats) renderBoard();
   } catch (err) {
@@ -783,9 +840,11 @@ async function savePointValues() {
 
 async function resetPointValues() {
   POINT_VALUES = { ...DEFAULT_POINT_VALUES };
+  TARGET_TOTAL = DEFAULT_TARGET_TOTAL;
   buildPvGrid(POINT_VALUES);
+  updateTargetTotalDisplays();
   try {
-    await window.storage.set(PV_STORAGE_KEY, JSON.stringify(POINT_VALUES), false);
+    await window.storage.set(PV_STORAGE_KEY, JSON.stringify({ pointValues: POINT_VALUES, targetTotal: TARGET_TOTAL }), false);
   } catch (err) {
     // Best effort — the in-memory reset still applies this session.
   }
@@ -795,6 +854,7 @@ async function resetPointValues() {
 
 document.getElementById('settingsBtn').addEventListener('click', () => {
   buildPvGrid(POINT_VALUES);
+  updateTargetTotalDisplays();
   setPvStatus('', '');
   document.getElementById('settingsOverlay').classList.add('open');
 });
