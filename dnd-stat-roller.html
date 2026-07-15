@@ -618,7 +618,7 @@
 <div class="explainer">
   <ol>
     <li>Roll 4d6, dropping the lowest, six times.</li>
-    <li>Convert each roll to its point-buy value and sum all six. If the total is over <span class="target-total-value">35</span>, reroll the whole set.</li>
+    <li>Convert each roll to its point-buy value and sum all six.</li>
     <li>From there, use point buy (up to a budget of <span class="target-total-value">35</span>) to raise or lower your scores. Rules:
       <ul>
         <li>Scores can be modified from 6 to 18.</li>
@@ -699,7 +699,6 @@ const DEFAULT_TARGET_TOTAL = 38;
 let TARGET_TOTAL = DEFAULT_TARGET_TOTAL;
 const MIN_SCORE = 6;
 const MAX_SCORE = 18;
-const MAX_ATTEMPTS = 200000;
 
 let currentStats = null; // holds live state while improving with leftover points
 
@@ -883,14 +882,9 @@ function generateStatSet() {
   return { stats, pointTotal };
 }
 
-function rollUntilValid() {
-  let attempts = 0;
-  let result;
-  do {
-    result = generateStatSet();
-    attempts++;
-  } while (result.pointTotal > TARGET_TOTAL && attempts < MAX_ATTEMPTS);
-  return { result, attempts };
+function rollOnce() {
+  const result = generateStatSet();
+  return { result, attempts: 1 };
 }
 
 let dragSourceIndex = null;
@@ -1076,7 +1070,6 @@ function renderBoard() {
       ${modifiedCount(currentStats.stats) > MAX_MODIFIED ? '&#9888; more stats modified than allowed &nbsp; ' : ''}
       ${spentPoints(currentStats.stats) > TARGET_TOTAL ? '&#9888; over budget' : ''}
     </div>` : ''}
-    <div class="attempts">found in ${currentStats.attempts} attempt${currentStats.attempts === 1 ? '' : 's'}</div>
   `;
 }
 
@@ -1087,7 +1080,7 @@ document.getElementById('rollBtn').addEventListener('click', () => {
   status.textContent = 'Rolling...';
 
   setTimeout(() => {
-    const { result, attempts } = rollUntilValid();
+    const { result, attempts } = rollOnce();
     currentStats = {
       stats: result.stats.map(s => ({ ...s, current: s.total })),
       pointTotal: result.pointTotal,
