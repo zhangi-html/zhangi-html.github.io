@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crafting XP v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #15120e;
+    --panel: #201a14;
+    --panel2: #29221a;
+    --line: #40362a;
+    --line-soft: #332b21;
+    --ink: #ece3d2;
+    --dim: #9c8d76;
+    --brass: #c99a4b;
+    --brass-dim: #8a6a37;
+    --verdigris: #74a394;
+    --mono: 'IBM Plex Mono', monospace;
+    --display: 'Fraunces', serif;
+    --body: 'Inter', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html, body{ height:100%; margin:0; }
+  body{
+    display:flex; flex-direction:column; background:var(--bg); color:var(--ink);
+    font-family:var(--body); -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+
+  /* ---- top bar ---- */
+  header.top-bar{
+    flex:0 0 auto; padding:14px 28px 12px; border-bottom:1px solid var(--line-soft); background:var(--bg); z-index:50;
+  }
+  .top-bar-row{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; }
+  h1{ font-family:var(--display); font-weight:700; font-size:1.5rem; letter-spacing:0.01em; margin:0; line-height:1.1; }
+  .tagline{ color:var(--dim); font-size:0.78rem; margin:2px 0 0; }
+  .top-bar-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+  .top-bar-actions button{ font-size:0.76rem; padding:6px 12px; white-space:nowrap; }
+  .info-text{
+    font-family:var(--body); font-size:0.82rem; color:var(--dim); line-height:1.5;
+    max-width:900px; margin:8px 0 0;
+  }
+  .info-text b{ color:var(--brass); font-weight:600; }
+
+  /* ---- main split ---- */
+  main.layout{ flex:1 1 auto; display:grid; grid-template-columns: 2fr 3fr; overflow:hidden; min-height:0; }
+  .branch-col{ overflow-y:auto; padding:16px 18px 60px; border-right:1px solid var(--line-soft); min-height:0; }
+  .detail-col{ overflow-y:auto; padding:16px 24px 60px; min-height:0; }
+
+  .cat-label{
+    font-family:var(--mono); font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--brass-dim); margin: 16px 0 6px; padding-left:2px;
+  }
+  .cat-label:first-child{ margin-top:0; }
+
+  .branch-row{
+    display:grid; grid-template-columns: 1fr auto auto; gap:10px; align-items:center;
+    background:var(--panel); border:1px solid var(--line-soft); border-radius:6px;
+    padding:9px 11px; margin-bottom:6px; cursor:pointer; transition:border-color .12s, background .12s;
+  }
+  .branch-row:hover{ border-color:var(--brass-dim); }
+  .branch-row.selected{ border-color:var(--brass); background:var(--panel2); }
+  .branch-row.dimmed{ opacity:0.32; }
+  .branch-row.dimmed:hover{ opacity:0.55; }
+  .branch-name{ font-weight:600; font-size:0.9rem; }
+  .branch-comps{ font-family:var(--mono); font-size:0.68rem; color:var(--dim); margin-top:2px; }
+  .comp-tag{ cursor:pointer; padding:1px 3px; border-radius:3px; transition:background .12s, color .12s; }
+  .comp-tag:hover{ background:var(--brass-dim); color:var(--bg); }
+  .comp-tag.pinned{ background:var(--brass); color:#1a1509; font-weight:600; }
+  .comp-sep{ color:var(--dim); }
+  .branch-level{ font-family:var(--mono); font-weight:600; font-size:0.95rem; color:var(--brass); text-align:right; min-width:34px; }
+  .branch-xp{ font-family:var(--mono); font-size:0.66rem; color:var(--dim); text-align:right; min-width:74px; }
+
+  .panel{ background:var(--panel); border:1px solid var(--line-soft); border-radius:8px; padding:18px 20px; }
+  .panel h2{ font-family:var(--display); font-size:1.25rem; margin:0 0 2px; font-weight:600; }
+  .panel .sub{ color:var(--dim); font-size:0.78rem; font-family:var(--mono); margin-bottom:14px; }
+  .empty-state{ color:var(--dim); font-size:0.9rem; padding:30px 0; text-align:center; }
+
+  .stat-row{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+  .stat-row .k{ color:var(--dim); font-size:0.8rem; }
+  .stat-row .v{ font-family:var(--mono); font-size:0.9rem; color:var(--ink); }
+  .stat-row .v.brass{ color:var(--brass); font-weight:600; }
+
+  .bar-track{ height:6px; background:var(--line-soft); border-radius:3px; overflow:hidden; margin:8px 0 12px; }
+  .bar-fill{ height:100%; background:var(--brass); border-radius:3px; transition:width .2s; }
+
+  .ledger-title{
+    font-family:var(--mono); font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--brass-dim); margin:16px 0 8px; border-top:1px solid var(--line-soft); padding-top:12px;
+  }
+  .invest-form{ display:flex; gap:8px; margin-top:6px; }
+  .invest-form input{
+    flex:1; background:var(--bg); border:1px solid var(--line); border-radius:4px;
+    color:var(--ink); font-family:var(--mono); font-size:0.9rem; padding:8px 10px;
+  }
+  .invest-form input:focus{ outline:none; border-color:var(--brass); }
+  button{
+    font-family:var(--body); font-weight:600; font-size:0.85rem; border:none; border-radius:4px;
+    padding:8px 16px; cursor:pointer; transition:opacity .12s;
+  }
+  button:hover{ opacity:0.85; }
+  .btn-brass{ background:var(--brass); color:#1a1509; }
+  .btn-ghost{ background:transparent; color:var(--dim); border:1px solid var(--line); }
+  .row-buttons{ display:flex; gap:8px; margin-top:8px; }
+
+  .log{ max-height:360px; overflow-y:auto; margin-top:8px; }
+
+  /* steps table */
+  .steps-table{ width:100%; border-collapse:collapse; font-family:var(--mono); font-size:0.76rem; table-layout:fixed; }
+  .steps-table th{
+    text-align:left; color:var(--brass-dim); font-size:0.63rem; text-transform:uppercase;
+    letter-spacing:0.08em; padding:4px 8px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--panel2);
+  }
+  .steps-table th:first-child, .steps-table td:first-child{ padding-left:2px; }
+  .steps-table td{ padding:6px 8px; border-bottom:1px solid var(--line-soft); vertical-align:top; }
+  .steps-table td.gold{ color:var(--brass); white-space:nowrap; }
+  .steps-table tr.preview-row{ background: rgba(201,154,75,0.08); border-left:2px solid var(--brass-dim); }
+  .steps-table tr.preview-row td{ font-style:italic; }
+  .steps-table .frac{ color:var(--dim); font-size:0.68rem; font-style:normal; }
+  .steps-table .branch-col{ color:var(--ink); font-weight:600; }
+  .log-empty-row td{ color:var(--dim); font-size:0.8rem; font-style:italic; padding:14px 8px; text-align:center; }
+
+  /* multiplier hover trigger */
+  .mult-wrap{ position:relative; display:inline-block; cursor:help; border-bottom:1px dotted var(--brass-dim); }
+  .mult-badge{ color:var(--verdigris); font-weight:600; }
+
+  #globalTooltip{
+    display:none; position:fixed; z-index:3000; width:320px;
+    background:var(--panel2); border:1px solid var(--line); border-radius:6px; padding:12px 14px;
+    box-shadow:0 10px 28px rgba(0,0,0,0.6); font-family:var(--mono);
+  }
+  .tt-header{ font-family:var(--display); font-size:0.95rem; color:var(--brass); margin-bottom:6px; font-weight:600; }
+  .tt-sister{ padding:5px 0; border-bottom:1px dashed var(--line-soft); }
+  .tt-sister:last-of-type{ border-bottom:none; }
+  .tt-sister.inactive{ opacity:0.55; }
+  .tt-sister-line{ display:grid; grid-template-columns: 1fr 42px 26px; column-gap:10px; align-items:baseline; font-size:0.78rem; }
+  .tt-cap{ text-align:right; color:var(--dim); }
+  .tt-val{ text-align:right; color:var(--brass); font-weight:600; }
+  .tt-sister.inactive .tt-val{ color:var(--dim); font-weight:400; }
+  .tt-shared{ padding-left:10px; font-size:0.7rem; color:var(--dim); margin-top:2px; }
+  .tt-total{ margin-top:6px; padding-top:8px; border-top:1px solid var(--line-soft); font-size:0.82rem; color:var(--brass); font-weight:600; }
+
+  /* ---- modals ---- */
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:4000;
+    align-items:center; justify-content:center; padding:24px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-box{
+    background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:22px 26px;
+    max-width:560px; width:100%; max-height:82vh; overflow-y:auto; position:relative;
+  }
+  .modal-box.wide{ max-width:800px; }
+  .modal-box h2{ font-family:var(--display); font-size:1.15rem; margin:0 0 14px; }
+  .modal-close{
+    position:absolute; top:14px; right:14px; background:transparent; border:none; color:var(--dim);
+    font-size:1.2rem; padding:2px 8px; line-height:1;
+  }
+  .modal-close:hover{ color:var(--ink); }
+  .modal-desc{ color:var(--dim); font-size:0.8rem; margin:0 0 14px; }
+  .ref-table-2col{ width:100%; border-collapse:collapse; font-family:var(--mono); font-size:0.82rem; }
+  .ref-table-2col th{
+    text-align:left; color:var(--brass-dim); font-size:0.66rem; text-transform:uppercase;
+    letter-spacing:0.08em; padding:4px 8px; border-bottom:1px solid var(--line);
+  }
+  .ref-table-2col th:last-child{ text-align:right; }
+  .ref-table-2col td{ padding:5px 8px; border-bottom:1px solid var(--line-soft); }
+  .ref-table-2col td:first-child{ color:var(--dim); }
+  .ref-table-2col td:last-child{ color:var(--ink); text-align:right; }
+  .global-list{ background:var(--panel); border:1px solid var(--line-soft); border-radius:6px; padding:2px 14px; }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="top-bar-row">
+    <div>
+      <h1>Crafting XP v2</h1>
+      <p class="tagline">Testing experience &amp; catch-up mechanics. Type a gold amount to preview it, hover any multiplier to see how it's built.</p>
+    </div>
+    <div class="top-bar-actions">
+      <button class="btn-ghost" id="openThresholds">XP Thresholds</button>
+      <button class="btn-ghost" id="openHistory">Full History (<span id="globalCountBtn">0</span>)</button>
+      <button class="btn-ghost" id="resetAll">Reset All</button>
+    </div>
+  </div>
+  <p class="info-text">
+    Proficiency in one trade accelerates XP gain in any trade that shares its disciplines and aptitudes — each qualifying trade adds <b>+1 to the multiplier applied to XP gained</b>. Sharing 1 skill helps until you're within 2 of its bonus, sharing 2 helps until you're within 1, and sharing 3 helps all the way until you match it.
+  </p>
+  <p class="info-text">
+    <b>Earning XP:</b> Major trades earn XP equal to the value of the item crafted. Gathering trades earn XP equal to the value of the material gathered. Minor trades earn XP faster than majors for comparable work (exact rate still TBD).
+  </p>
+</header>
+
+<main class="layout">
+  <section class="branch-col">
+    <div id="branchList"></div>
+  </section>
+  <section class="detail-col">
+    <div class="panel" id="detailPanel">
+      <div class="empty-state">Select a trade on the left to invest gold and see its catch-up multiplier.</div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-overlay" id="thresholdModal">
+  <div class="modal-box">
+    <button class="modal-close" id="closeThresholds">&times;</button>
+    <h2>XP Thresholds</h2>
+    <p class="modal-desc">Cumulative XP needed to reach each bonus.</p>
+    <table class="ref-table-2col">
+      <thead><tr><th>Bonus</th><th>XP</th></tr></thead>
+      <tbody id="refGrid"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-overlay" id="historyModal">
+  <div class="modal-box wide">
+    <button class="modal-close" id="closeHistory">&times;</button>
+    <h2>Full investment history — all trades</h2>
+    <div class="global-list" id="globalHistList"></div>
+  </div>
+</div>
+
+<div id="globalTooltip"></div>
+
+<script>
+const BRANCHES = [
+  {key:'alchemy', name:'Alchemy', cat:'Major', comps:['Chemistry','Thaumaturgy','Study']},
+  {key:'poisoncraft', name:'Poisoncraft', cat:'Major', comps:['Chemistry','Study','Acuity']},
+  {key:'blacksmithing', name:'Blacksmithing', cat:'Major', comps:['Metallurgy','Force','Grit']},
+  {key:'cooking', name:'Cooking', cat:'Major', comps:['Gastronomy','Acuity','Taste']},
+  {key:'enchanting', name:'Enchanting', cat:'Major', comps:['Goldsmith','Thaumaturgy','Study']},
+  {key:'scrollscribing', name:'Scrollscribing', cat:'Major', comps:['Calligraphy','Thaumaturgy','Study']},
+  {key:'wandwhittling', name:'Wand Whittling', cat:'Major', comps:['Woodworking','Thaumaturgy','Precision']},
+  {key:'leatherworking', name:'Leatherworking', cat:'Major', comps:['Tailoring','Force','Precision']},
+  {key:'tinkering', name:'Tinkering', cat:'Major', comps:['Mechanics','Precision','Study']},
+  {key:'woodcarving', name:'Woodcarving', cat:'Major', comps:['Woodworking','Precision','Taste']},
+  {key:'runecarving', name:'Runecarving', cat:'Major', comps:['Calligraphy','Thaumaturgy','Force']},
+  {key:'engineeringbranch', name:'Engineering', cat:'Major', comps:['Engineering','Force','Study']},
+  {key:'weaving', name:'Weaving', cat:'Minor', comps:['Tailoring','Grit','Taste']},
+  {key:'cobbling', name:'Cobbling', cat:'Minor', comps:['Tailoring','Force','Precision']},
+  {key:'masonry', name:'Masonry', cat:'Minor', comps:['Engineering','Force','Grit']},
+  {key:'glassblowing', name:'Glassblowing', cat:'Minor', comps:['Chemistry','Force','Grit']},
+  {key:'painting', name:'Painting', cat:'Minor', comps:['Calligraphy','Acuity','Taste']},
+  {key:'brewing', name:'Brewing', cat:'Minor', comps:['Gastronomy','Chemistry','Taste']},
+  {key:'jewelcrafting', name:'Jewelcrafting', cat:'Minor', comps:['Goldsmith','Precision','Taste']},
+  {key:'carpentry', name:'Carpentry', cat:'Minor', comps:['Woodworking','Engineering','Force']},
+  {key:'foraging', name:'Foraging', cat:'Gathering', comps:['Chemistry','Grit','Study']},
+  {key:'processing', name:'Processing', cat:'Gathering', comps:['Tailoring','Force','Acuity']},
+  {key:'mining', name:'Mining', cat:'Gathering', comps:['Metallurgy','Force','Grit']},
+  {key:'salvaging', name:'Salvaging', cat:'Gathering', comps:['Mechanics','Study','Acuity']},
+  {key:'woodcutting', name:'Woodcutting', cat:'Gathering', comps:['Woodworking','Force','Grit']},
+];
+const CATS = ['Major','Minor','Gathering'];
+const byKey = Object.fromEntries(BRANCHES.map(b=>[b.key,b]));
+
+let xp = Object.fromEntries(BRANCHES.map(b=>[b.key,0]));
+let selected = null;
+let history = [];
+let stepCounter = 0;
+let tooltipData = {};
+let tooltipIdCounter = 0;
+let pinnedComp = null;
+
+function xpReq(level){ return level<=0 ? 0 : 10*Math.pow(2, level-1); }
+function levelFromXp(x){ let l=0; while(xpReq(l+1)<=x) l++; return l; }
+function overlapComps(a,b){ return a.comps.filter(c=>b.comps.includes(c)); }
+
+function computeMultiplierBreakdown(key, xpState){
+  xpState = xpState || xp;
+  const b = byKey[key];
+  const curLevel = levelFromXp(xpState[key]);
+  const rows = [];
+  let total = 1;
+  BRANCHES.forEach(s=>{
+    if(s.key===key || xpState[s.key]<=0) return;
+    const shared = overlapComps(b,s);
+    if(shared.length===0) return;
+    const sLevel = levelFromXp(xpState[s.key]);
+    const diff = Math.max(0, sLevel - curLevel);
+    const threshold = 3 - shared.length;
+    const qualifies = diff > threshold;
+    const contrib = qualifies ? 1 : 0;
+    rows.push({key:s.key, name:s.name, shared, sLevel, diff, threshold, contrib});
+    total += contrib;
+  });
+  rows.sort((a,b)=>b.contrib-a.contrib || b.diff-a.diff);
+  return {rows, total, curLevel};
+}
+
+// Core simulation: mutates xpState in place, returns the list of step records.
+function simulateInvest(key, gold, xpState){
+  let remaining = gold;
+  const steps = [];
+  let guard = 0;
+  while(remaining > 0 && guard < 500){
+    guard++;
+    const levelBefore = levelFromXp(xpState[key]);
+    const xpBefore = xpState[key];
+    const {rows, total: mult} = computeMultiplierBreakdown(key, xpState);
+    const nextThreshold = xpReq(levelBefore+1);
+    const gapRaw = nextThreshold - xpBefore;
+    const goldNeeded = Math.ceil(gapRaw / mult);
+    let record;
+    if(goldNeeded > 0 && remaining >= goldNeeded){
+      xpState[key] += goldNeeded * mult;
+      remaining -= goldNeeded;
+      record = {type:'invest', branchKey:key, gold:goldNeeded, multiplier:mult, breakdown:rows,
+        levelBefore, xpBefore, levelAfter: levelFromXp(xpState[key]), xpAfter: xpState[key], partial:false};
+    } else {
+      xpState[key] += remaining * mult;
+      record = {type:'invest', branchKey:key, gold:remaining, multiplier:mult, breakdown:rows,
+        levelBefore, xpBefore, levelAfter: levelFromXp(xpState[key]), xpAfter: xpState[key], partial:true};
+      remaining = 0;
+    }
+    steps.push(record);
+  }
+  return steps;
+}
+
+function registerTooltip(branchName, levelBefore, rows, mult){
+  const id = 'mt' + (++tooltipIdCounter);
+  tooltipData[id] = {branchName, levelBefore, rows, mult};
+  return id;
+}
+function renderMultCell(branchName, levelBefore, rows, mult){
+  const id = registerTooltip(branchName, levelBefore, rows, mult);
+  return `<span class="mult-wrap" data-tt="${id}"><span class="mult-badge">×${mult}</span></span>`;
+}
+
+function buildTooltipHtml(data){
+  const {branchName, levelBefore, rows, mult} = data;
+  let body = '';
+  rows.forEach(r=>{
+    const active = r.contrib>0;
+    const cap = r.sLevel - r.threshold;
+    body += `<div class="tt-sister ${active?'':'inactive'}">
+      <div class="tt-sister-line">
+        <span>${r.name} +${r.sLevel}</span>
+        <span class="tt-cap">to +${cap}</span>
+        <span class="tt-val">${active ? '+1' : '+0'}</span>
+      </div>
+      <div class="tt-shared">${r.shared.join(', ')}</div>
+    </div>`;
+  });
+  return `<div class="tt-header">${branchName} +${levelBefore}</div>
+    ${body}
+    <div class="tt-sister-line tt-total"><span style="grid-column:1/3">=</span><span class="tt-val">×${mult}</span></div>`;
+}
+
+function showTooltip(target){
+  const id = target.dataset.tt;
+  const data = tooltipData[id];
+  if(!data) return;
+  const tt = document.getElementById('globalTooltip');
+  tt.innerHTML = buildTooltipHtml(data);
+  tt.style.display = 'block';
+  const rect = target.getBoundingClientRect();
+  const ttRect = tt.getBoundingClientRect();
+  let left = rect.left;
+  let top = rect.bottom + 8;
+  if(left + ttRect.width > window.innerWidth - 16) left = window.innerWidth - ttRect.width - 16;
+  if(top + ttRect.height > window.innerHeight - 16){ top = rect.top - ttRect.height - 8; }
+  if(top < 8) top = 8;
+  tt.style.left = left + 'px';
+  tt.style.top = top + 'px';
+}
+function hideTooltip(){ document.getElementById('globalTooltip').style.display='none'; }
+
+document.body.addEventListener('mouseover', e=>{
+  const wrap = e.target.closest('.mult-wrap');
+  if(wrap) showTooltip(wrap);
+});
+document.body.addEventListener('mouseout', e=>{
+  const wrap = e.target.closest('.mult-wrap');
+  if(wrap && !(e.relatedTarget && wrap.contains(e.relatedTarget))) hideTooltip();
+});
+
+function renderStepsRows(steps, opts){
+  opts = opts || {};
+  return steps.map(s=>{
+    const branchName = byKey[s.branchKey].name;
+    if(s.type==='manual'){
+      const lvlB = levelFromXp(s.fromXp), lvlA = levelFromXp(s.toXp);
+      return `<tr>
+        ${opts.showBranch?`<td class="branch-col">${branchName}</td>`:''}
+        <td class="gold">manual</td>
+        <td>—</td>
+        <td>+${lvlB} <span class="frac">(${s.fromXp.toLocaleString()})</span></td>
+        <td>+${lvlA} <span class="frac">(${s.toXp.toLocaleString()})</span></td>
+      </tr>`;
+    }
+    return `<tr class="${opts.isPreview?'preview-row':''}">
+      ${opts.showBranch?`<td class="branch-col">${branchName}</td>`:''}
+      <td class="gold">${s.gold.toLocaleString()}</td>
+      <td>${renderMultCell(branchName, s.levelBefore, s.breakdown, s.multiplier)}</td>
+      <td>+${s.levelBefore} <span class="frac">(${s.xpBefore.toLocaleString()}/${xpReq(s.levelBefore+1).toLocaleString()})</span></td>
+      <td>+${s.levelAfter} <span class="frac">(${s.xpAfter.toLocaleString()}/${xpReq(s.levelAfter+1).toLocaleString()})</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function stepsTableShell(bodyHtml, showBranch, emptyText){
+  const branchTh = showBranch ? '<th>Trade</th>' : '';
+  const cols = showBranch ? 5 : 4;
+  const body = bodyHtml || `<tr class="log-empty-row"><td colspan="${cols}">${emptyText}</td></tr>`;
+  return `<table class="steps-table"><thead><tr>${branchTh}<th>Gold</th><th>×</th><th>Before</th><th>After</th></tr></thead><tbody>${body}</tbody></table>`;
+}
+
+function applyCompHighlight(comp){
+  document.querySelectorAll('#branchList .branch-row').forEach(row=>{
+    const comps = row.dataset.comps ? row.dataset.comps.split('|') : [];
+    row.classList.toggle('dimmed', !!comp && !comps.includes(comp));
+  });
+}
+
+function render(){
+  const list = document.getElementById('branchList');
+  list.innerHTML = '';
+  CATS.forEach(cat=>{
+    const label = document.createElement('div');
+    label.className='cat-label';
+    label.textContent = cat + ' Trades';
+    list.appendChild(label);
+    BRANCHES.filter(b=>b.cat===cat).forEach(b=>{
+      const lvl = levelFromXp(xp[b.key]);
+      const row = document.createElement('div');
+      row.className = 'branch-row' + (selected===b.key ? ' selected':'');
+      row.dataset.comps = b.comps.join('|');
+      const compsHtml = b.comps.map(c=>
+        `<span class="comp-tag${c===pinnedComp?' pinned':''}" data-comp="${c}">${c}</span>`
+      ).join('<span class="comp-sep"> · </span>');
+      row.innerHTML = `
+        <div>
+          <div class="branch-name">${b.name}</div>
+          <div class="branch-comps">${compsHtml}</div>
+        </div>
+        <div class="branch-xp">${xp[b.key].toLocaleString()} xp</div>
+        <div class="branch-level">+${lvl}</div>
+      `;
+      row.onclick = (e)=>{ if(e.target.closest('.comp-tag')) return; selected = b.key; render(); };
+      list.appendChild(row);
+    });
+  });
+  applyCompHighlight(pinnedComp);
+
+  const panel = document.getElementById('detailPanel');
+  if(!selected){
+    panel.innerHTML = '<div class="empty-state">Select a trade on the left to invest gold and see its catch-up multiplier.</div>';
+  } else {
+    const b = byKey[selected];
+    const lvl = levelFromXp(xp[selected]);
+    const nextThreshold = xpReq(lvl+1);
+    const prevThreshold = xpReq(lvl);
+    const progress = nextThreshold>prevThreshold ? (xp[selected]-prevThreshold)/(nextThreshold-prevThreshold) : 0;
+    const {rows, total} = computeMultiplierBreakdown(selected);
+    const branchHist = history.filter(h=>h.branchKey===selected).slice().reverse();
+    const committedRowsHtml = renderStepsRows(branchHist, {isPreview:false});
+
+    panel.innerHTML = `
+      <h2>${b.name}</h2>
+      <div class="sub">${b.comps.join(' · ')} — ${b.cat}</div>
+
+      <div class="stat-row"><span class="k">Current bonus</span><span class="v brass">+${lvl}</span></div>
+      <div class="stat-row"><span class="k">Total XP invested</span><span class="v">${xp[selected].toLocaleString()}</span></div>
+      <div class="stat-row"><span class="k">Next threshold (+${lvl+1})</span><span class="v">${nextThreshold.toLocaleString()}</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,progress*100)}%"></div></div>
+      <div class="stat-row"><span class="k">Current multiplier</span><span class="v">${renderMultCell(b.name, lvl, rows, total)}</span></div>
+
+      <div class="ledger-title">Invest gold</div>
+      <div class="invest-form">
+        <input type="text" inputmode="numeric" id="goldInput" placeholder="gold amount">
+        <button class="btn-brass" id="investBtn">Invest</button>
+      </div>
+      <div class="row-buttons">
+        <button class="btn-ghost" id="setXpBtn">Set XP directly…</button>
+        <button class="btn-ghost" id="clearBtn">Clear trade</button>
+      </div>
+
+      <div class="ledger-title" id="histTitle">Investment history (${branchHist.length} step${branchHist.length===1?'':'s'})</div>
+      <div class="log">
+        <div id="histTableWrap">${stepsTableShell(committedRowsHtml, false, 'No investments yet.')}</div>
+      </div>
+    `;
+
+    const goldInput = document.getElementById('goldInput');
+    const histTableWrap = document.getElementById('histTableWrap');
+
+    function updatePreview(){
+      const val = parseInt(goldInput.value.replace(/[^0-9]/g,''), 10);
+      let previewRowsHtml = '';
+      if(val > 0){
+        const clone = {...xp};
+        const steps = simulateInvest(selected, val, clone);
+        previewRowsHtml = renderStepsRows(steps.slice().reverse(), {isPreview:true});
+      }
+      histTableWrap.innerHTML = stepsTableShell(previewRowsHtml + committedRowsHtml, false, 'No investments yet.');
+    }
+    goldInput.addEventListener('input', updatePreview);
+
+    document.getElementById('investBtn').onclick = ()=>{
+      const val = parseInt(goldInput.value.replace(/[^0-9]/g,''), 10);
+      if(!isNaN(val) && val>0){
+        const steps = simulateInvest(selected, val, xp);
+        steps.forEach(s=> history.push({...s, id: ++stepCounter}));
+        render();
+      }
+    };
+    goldInput.addEventListener('keydown', e=>{
+      if(e.key==='Enter') document.getElementById('investBtn').click();
+    });
+    document.getElementById('setXpBtn').onclick = ()=>{
+      const val = prompt('Set raw XP for '+b.name+' (bypasses multiplier, for scenario setup):', xp[selected]);
+      if(val!==null){
+        const n = parseInt(val.replace(/[^0-9]/g,''),10);
+        if(!isNaN(n)){
+          history.push({id: ++stepCounter, type:'manual', branchKey:selected, fromXp:xp[selected], toXp:n});
+          xp[selected]=n;
+          render();
+        }
+      }
+    };
+    document.getElementById('clearBtn').onclick = ()=>{
+      xp[selected]=0;
+      history = history.filter(h=>h.branchKey!==selected);
+      render();
+    };
+  }
+
+  const chronological = history.slice().reverse();
+  document.getElementById('globalHistList').innerHTML = stepsTableShell(renderStepsRows(chronological, {showBranch:true, isPreview:false}), true, 'No investments yet.');
+  document.getElementById('globalCountBtn').textContent = history.length;
+}
+
+document.getElementById('resetAll').onclick = ()=>{
+  BRANCHES.forEach(b=>xp[b.key]=0);
+  history = [];
+  render();
+};
+
+const branchListEl = document.getElementById('branchList');
+branchListEl.addEventListener('mouseover', e=>{
+  const tag = e.target.closest('.comp-tag');
+  if(tag) applyCompHighlight(tag.dataset.comp);
+});
+branchListEl.addEventListener('mouseout', e=>{
+  const tag = e.target.closest('.comp-tag');
+  if(tag) applyCompHighlight(pinnedComp);
+});
+branchListEl.addEventListener('click', e=>{
+  const tag = e.target.closest('.comp-tag');
+  if(!tag) return;
+  const comp = tag.dataset.comp;
+  pinnedComp = (pinnedComp===comp) ? null : comp;
+  render();
+});
+
+// modals
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.getElementById('openThresholds').onclick = ()=> openModal('thresholdModal');
+document.getElementById('closeThresholds').onclick = ()=> closeModal('thresholdModal');
+document.getElementById('openHistory').onclick = ()=> openModal('historyModal');
+document.getElementById('closeHistory').onclick = ()=> closeModal('historyModal');
+[['thresholdModal'],['historyModal']].forEach(([id])=>{
+  document.getElementById(id).addEventListener('click', e=>{
+    if(e.target.id===id) closeModal(id);
+  });
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ closeModal('thresholdModal'); closeModal('historyModal'); }
+});
+
+const refGrid = document.getElementById('refGrid');
+for(let i=1;i<=17;i++){
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>+${i}</td><td>${xpReq(i).toLocaleString()}</td>`;
+  refGrid.appendChild(tr);
+}
+
+render();
+</script>
+</body>
+</html>
