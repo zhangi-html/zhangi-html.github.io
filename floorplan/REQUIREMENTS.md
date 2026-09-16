@@ -215,6 +215,7 @@ This supports rectangles, polygons, stepped outlines, open line features, and fu
 ## Interaction and viewport
 
 - Smooth scroll-wheel zoom is required.
+- The top bar should provide an Import clipboard action beside Export plan. It should accept the tool's exported JSON, validate it before mutation, import it as one undoable operation, and refresh the canvas, inspector, asset library, and local draft immediately.
 - Zoom should be centered around the cursor position when possible.
 - Wheel zoom must preserve the exact world coordinate under the cursor. Plus/minus zoom must preserve the center of the canvas.
 - Pan should be available through right-click-and-drag, with middle mouse or space-drag as possible alternatives.
