@@ -1,0 +1,66 @@
+/* Asset-library-only left rail. */
+.left-panel .section-title.with-action {
+  display: block;
+  color: var(--green);
+  font-size: 12px;
+  letter-spacing: .2px;
+}
+
+.left-panel .section-title.with-action button {
+  display: none;
+}
+
+.new-asset-row {
+  min-height: 36px;
+  padding: 5px 8px;
+  margin-top: 10px;
+  background: #fff;
+  border: 1px dashed #bcd6c4;
+}
+
+.new-asset-row .swatch {
+  display: none;
+}
+
+.new-asset-row .new-asset-mark {
+  flex: 0 0 auto;
+  color: var(--green);
+  font: 8px 'DM Mono';
+  letter-spacing: .5px;
+}
+
+.new-asset-row strong {
+  color: var(--green);
+}
+
+.new-asset-row small {
+  color: var(--muted);
+}
+
+.mode.active {
+  background: var(--green) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 6px #396b5944 !important;
+}
+
+.asset-shape:not(.builtin-shape) {
+  fill: #dceade;
+  stroke: #6b9479;
+}
+
+.asset-shape.selected-shape {
+  fill: #e8f3e9;
+  stroke: var(--green);
+}
+
+.rotation-center {
+  fill: #fff;
+  stroke: var(--orange);
+  stroke-width: 1;
+}
+
+.rotation-center-cross {
+  stroke: var(--orange);
+  stroke-width: .7;
+  pointer-events: none;
+}

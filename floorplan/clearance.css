@@ -1,0 +1,129 @@
+/* Collision and clearance visualization. */
+.stage {
+  background-image: none;
+}
+
+.asset-shape:not(.collision-furniture) {
+  fill-opacity: .5;
+  stroke-opacity: .75;
+}
+
+.asset-shape.collision-furniture {
+  opacity: .38;
+  fill: #efaaa0 !important;
+  stroke: #c8564b !important;
+}
+
+.room-edge.doorway-edge {
+  stroke: #9b6546;
+  stroke-width: 2;
+}
+
+.room-edge.sliding-door-edge {
+  stroke: #4f7fa3;
+  stroke-width: 2;
+}
+
+.room-edge.sliding-door-part-edge {
+  stroke: #7868a6;
+  stroke-dasharray: 4 2;
+  stroke-width: 1.9;
+}
+
+.room-edge.collision-edge {
+  stroke: #c8564b !important;
+  stroke-width: 2.2 !important;
+}
+
+.room-edge.hidden-edge {
+  stroke-dasharray: 3 2;
+  opacity: .42;
+}
+
+.room-edge.clearance-edge {
+  stroke-dasharray: 2 1;
+}
+
+.room-edge.clearance-boundary {
+  stroke-dasharray: none;
+}
+
+.room-edge.collision-edge.hidden-edge {
+  opacity: 1;
+  stroke-dasharray: 3 2;
+}
+
+.collision-edge-overlay {
+  fill: none;
+  stroke: #c8564b;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.clearance-surface {
+  fill: #b7cdbd2e;
+  stroke: #739b7d99;
+  stroke-width: .55;
+  stroke-dasharray: 3 2;
+  pointer-events: none;
+}
+
+.clearance-under-furniture {
+  fill: #ffffff3d;
+  stroke: #ffffff88;
+  stroke-width: .5;
+  pointer-events: none;
+}
+
+.clearance-editor {
+  border-top: 1px solid var(--line);
+  margin-top: 18px;
+  padding-top: 16px;
+}
+
+.clearance-editor label {
+  display: block;
+  color: var(--muted);
+  font: 9px 'DM Mono';
+  letter-spacing: .5px;
+  margin: 10px 0;
+  text-transform: uppercase;
+}
+
+.clearance-editor input[type="number"] {
+  display: block;
+  margin-top: 5px;
+  padding: 8px;
+  width: 100%;
+}
+
+.clearance-editor select {
+  background: var(--paper, #fff);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  display: block;
+  font: 12px 'DM Mono';
+  margin-top: 5px;
+  padding: 8px;
+  width: 100%;
+}
+
+.clearance-editor .edge-clearance-heading {
+  margin-top: 18px;
+}
+
+.clearance-editor label.check {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  line-height: 1.35;
+}
+
+.clearance-editor label.check input {
+  flex: 0 0 auto;
+  height: 16px;
+  margin: 0;
+  order: 2;
+  width: 16px;
+}

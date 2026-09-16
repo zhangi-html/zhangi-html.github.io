@@ -1,0 +1,45 @@
+/* Furniture inspector refinements. */
+.asset-editor label.check {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  line-height: 1.35;
+}
+
+.asset-editor label.check input {
+  order: 2;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.asset-form-note {
+  color: var(--muted);
+  font: 9px 'DM Mono';
+  line-height: 1.5;
+  margin: -4px 0 13px;
+}
+
+.asset-status {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font: 9px 'DM Mono';
+  line-height: 1.6;
+  margin-top: 16px;
+  padding-top: 12px;
+}
+
+.right-asset-editor input[readonly] {
+  background: #f7faf7;
+  color: var(--muted);
+}
+
+.collision-shape {
+  display: none;
+}
+
+.selected-shape + .collision-shape {
+  display: block;
+}
