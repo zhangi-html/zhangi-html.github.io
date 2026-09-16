@@ -39,6 +39,31 @@
     color: var(--dim);
     font-size: 0.95rem;
   }
+  .purpose-tabs {
+    display: flex;
+    gap: 6px;
+    margin: 0 0 16px;
+    padding: 4px;
+    background: rgba(30, 36, 48, 0.7);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .purpose-tab {
+    flex: 1;
+    padding: 9px 12px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--dim);
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .purpose-tab:hover,
+  .purpose-tab.active {
+    background: var(--accent);
+    color: #fff;
+  }
   ul {
     list-style: none;
     margin: 0;
@@ -85,6 +110,10 @@
 <main>
   <h1>Published pages</h1>
   <p class="intro">Raw HTML I publish here and there.</p>
+  <nav class="purpose-tabs" aria-label="Tools by purpose">
+    <button class="purpose-tab active" type="button" data-purpose="dnd" aria-pressed="true">D&amp;D</button>
+    <button class="purpose-tab" type="button" data-purpose="personal" aria-pressed="false">Personal Tools</button>
+  </nav>
   <ul id="pages"></ul>
   <footer>
     <a href="https://github.com/zhangi-html/zhangi-html.github.io">Source on GitHub</a>
@@ -95,26 +124,54 @@
     {
       href: 'dnd-stat-roller.html',
       title: 'Waterdeep Stat Rolls',
-      description: 'Character creation tool for my Waterdeep campaign.'
+      description: 'Character creation tool for my Waterdeep campaign.',
+      purpose: 'dnd'
     },
     {
       href: 'crafting-v2.html',
       title: 'Crafting XP v2',
-      description: 'Experience and catch-up mechanics for D&D crafting trades.'
+      description: 'Experience and catch-up mechanics for D&D crafting trades.',
+      purpose: 'dnd'
+    },
+    {
+      href: 'floorplan/index.html',
+      title: 'Interior Planning Tool',
+      description: 'Build a measured room layout, place furniture, and model clearances.',
+      purpose: 'personal'
     }
   ];
 
   const list = document.getElementById('pages');
-  for (const page of pages) {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href = page.href;
-    a.innerHTML =
-      '<span class="page-title">' + page.title + '</span>' +
-      '<span class="page-desc">' + page.description + '</span>';
-    li.appendChild(a);
-    list.appendChild(li);
-  }
+  const renderPages = purpose => {
+    list.replaceChildren();
+    for (const page of pages.filter(item => item.purpose === purpose)) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      const title = document.createElement('span');
+      const description = document.createElement('span');
+      a.href = page.href;
+      title.className = 'page-title';
+      title.textContent = page.title;
+      description.className = 'page-desc';
+      description.textContent = page.description;
+      a.append(title, description);
+      li.appendChild(a);
+      list.appendChild(li);
+    }
+  };
+
+  document.querySelectorAll('.purpose-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.purpose-tab').forEach(item => {
+        const active = item === tab;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      renderPages(tab.dataset.purpose);
+    });
+  });
+
+  renderPages('dnd');
 </script>
 </body>
 </html>
