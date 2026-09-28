@@ -1,0 +1,1799 @@
+{
+  "title": "Ranger Knacks",
+  "knacksKnown": [
+    1,
+    3,
+    4,
+    5,
+    5,
+    7,
+    8,
+    8,
+    10,
+    10,
+    11,
+    11,
+    11,
+    13,
+    14,
+    14,
+    14,
+    14,
+    14,
+    14
+  ],
+  "pillars": [
+    {
+      "name": "Combat",
+      "color": "#a3182f"
+    },
+    {
+      "name": "Social",
+      "color": "#3a44a6"
+    },
+    {
+      "name": "Exploration",
+      "color": "#2e8a3c"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Nature",
+      "color": "#4f7a34"
+    },
+    {
+      "name": "Climate Adaptation",
+      "color": "#3a6f94"
+    },
+    {
+      "name": "Proficiency/Expertise",
+      "color": "#8a6d1f"
+    },
+    {
+      "name": "Hunter's Mark",
+      "color": "#a33d2a"
+    },
+    {
+      "name": "Critical Hits",
+      "color": "#c2572b"
+    },
+    {
+      "name": "Mount",
+      "color": "#7a5536"
+    },
+    {
+      "name": "Spells",
+      "color": "#5d4aa0"
+    },
+    {
+      "name": "Healing",
+      "color": "#23866a"
+    },
+    {
+      "name": "Stealth",
+      "color": "#4b5170"
+    },
+    {
+      "name": "Tracking",
+      "color": "#8c4f7c"
+    },
+    {
+      "name": "Mobility",
+      "color": "#2a7c93"
+    },
+    {
+      "name": "Crafting",
+      "color": "#62852a"
+    },
+    {
+      "name": "Defense",
+      "color": "#0f83ff"
+    },
+    {
+      "name": "Sense",
+      "color": "#6b6a58"
+    },
+    {
+      "name": "Familiar",
+      "color": "#f29cb6"
+    }
+  ],
+  "knacks": [
+    {
+      "id": "deft-explorer-1",
+      "name": "Deft Explorer I",
+      "status": "updated",
+      "pillars": [
+        "Exploration",
+        "Social"
+      ],
+      "group": "Proficiencies",
+      "level": 1,
+      "prereqs": [],
+      "tags": [
+        "Proficiency/Expertise"
+      ],
+      "text": [
+        "***Proficiency.*** Choose one skill with which you lack proficiency. You gain proficiency in that skill.",
+        "***Expertise.*** Choose one of your skill proficiencies with which you lack Expertise. You gain Expertise in that skill.",
+        "***Languages.*** You know one language of your choice."
+      ],
+      "oldText": [
+        "***Expertise.*** Choose one of your skill proficiencies with which you lack Expertise. You gain Expertise in that skill.",
+        "***Languages.*** You know one language of your choice."
+      ]
+    },
+    {
+      "id": "deft-explorer-2",
+      "name": "Deft Explorer II",
+      "status": "updated",
+      "pillars": [
+        "Exploration",
+        "Social"
+      ],
+      "group": "Proficiencies",
+      "level": 6,
+      "prereqs": [
+        "deft-explorer-1"
+      ],
+      "tags": [
+        "Proficiency/Expertise"
+      ],
+      "text": [
+        "***Proficiency.*** Choose one skill with which you lack proficiency. You gain proficiency in that skill.",
+        "***Expertise.*** Choose another of your skill proficiencies with which you lack Expertise. You gain Expertise in that skill.",
+        "***Languages.*** You know one additional language of your choice."
+      ],
+      "oldText": [
+        "***Expertise.*** Choose another of your skill proficiencies with which you lack Expertise. You gain Expertise in that skill.",
+        "***Languages.*** You know one additional language of your choice."
+      ]
+    },
+    {
+      "id": "deft-explorer-3",
+      "name": "Deft Explorer III",
+      "status": "updated",
+      "pillars": [
+        "Exploration",
+        "Social"
+      ],
+      "group": "Proficiencies",
+      "level": 9,
+      "prereqs": [
+        "deft-explorer-2"
+      ],
+      "tags": [
+        "Proficiency/Expertise"
+      ],
+      "text": [
+        "***Proficiency.*** Choose one skill with which you lack proficiency. You gain proficiency in that skill.",
+        "***Expertise.*** Choose another of your skill proficiencies with which you lack Expertise. You gain Expertise in that skill.",
+        "***Languages.*** You know one additional language of your choice."
+      ],
+      "oldText": [
+        "***Expertise.*** Choose another of your skill proficiencies with which you lack Expertise. You gain Expertise in that skill.",
+        "***Languages.*** You know one additional language of your choice."
+      ]
+    },
+    {
+      "id": "strider-1",
+      "name": "Strider I",
+      "status": "new",
+      "pillars": [
+        "Exploration"
+      ],
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Navigate",
+      "tags": [
+        "Mobility",
+        "Nature"
+      ],
+      "text": [
+        "Your movement is unaffected by Difficult Terrain imposed by natural environments (such as undergrowth, snow, or swamp), you cannot become lost so long as you can see the night sky, and you and up to 10 creatures who travel with you don't have travel slowed by natural Difficult Terrain.",
+        "You gain Expertise in Navigate."
+      ],
+      "oldText": [
+        "Your movement is unaffected by Difficult Terrain imposed by natural environments, such as undergrowth, snow, or swamp. You also can't become lost so long as you can see the night sky.",
+        "Finally, the Travel Pace of you and up to 10 creatures who travel with you is unaffected by natural Difficult Terrain."
+      ]
+    },
+    {
+      "id": "strider-2",
+      "name": "Strider II",
+      "status": "updated",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 3,
+      "prereqs": [
+        "strider-1"
+      ],
+      "tags": [
+        "Mobility"
+      ],
+      "text": [
+        "Once in your sights, you pursue your enemies relentlessly. You can take the [[rule:Dash]] action as a Bonus Action on your turn."
+      ],
+      "clarifications": [
+        "House Rule for [[rule: Dash]]"
+      ],
+      "oldText": [
+        "Once in your sights, you pursue your enemies relentlessly. You can take the Dash action as a Bonus Action on your turn."
+      ]
+    },
+    {
+      "id": "strider-3",
+      "name": "Strider III",
+      "pillars": [
+        "Combat",
+        "Exploration"
+      ],
+      "level": 6,
+      "prereqs": [
+        "strider-2"
+      ],
+      "tags": [
+        "Mobility"
+      ],
+      "text": [
+        "You can surmount almost any obstacle that would block your path. Your [[rule:Speed]] increases by 10 feet, your movement is unaffected by [[rule:Difficult Terrain]] imposed by any spell, magical phenomena, or any other supernatural effect."
+      ]
+    },
+    {
+      "id": "strider-4",
+      "name": "Strider IV",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 14,
+      "prereqs": [
+        "strider-3"
+      ],
+      "tags": [
+        "Mobility",
+        "Spells"
+      ],
+      "text": [
+        "You move through the world unhindered by even the most powerful magic and restraints. You are always under the effects of a [[spell:Freedom of Movement]] spell unless you have the [[rule:Unconscious]] condition."
+      ]
+    },
+    {
+      "id": "naturalist-1",
+      "name": "Naturalist I",
+      "status": "new",
+      "pillars": [
+        "Exploration"
+      ],
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Nature",
+      "tags": [
+        "Nature",
+        "Proficiency/Expertise"
+      ],
+      "text": [
+        "You are an intuitive scholar of the wild. You use Wisdom, in place of Intelligence, for Lore checks related to nature.",
+        "Also, you can use a Bonus Action on each turn to make a Nature check to recall knowledge about one Beast or Plant you can see.",
+        "You gain Expertise in Nature."
+      ],
+      "oldText": [
+        "You are an intuitive student of the wilderness. Whenever you would make an Intelligence (Nature) check in the wilderness, you can choose to make a Wisdom (Nature) check instead.",
+        "Also, you can make Wisdom (Nature) checks as a Bonus Action to recall knowledge about one beast or plant you see."
+      ]
+    },
+    {
+      "id": "naturalist-2",
+      "name": "Naturalist II",
+      "status": "new",
+      "pillars": [
+        "Exploration"
+      ],
+      "level": 6,
+      "prereqs": [
+        "naturalist-1"
+      ],
+      "tags": [
+        "Nature",
+        "Spells"
+      ],
+      "text": [
+        "Your understanding grants you a mystical connection to the natural world. At the end of each Short or Long Rest, you gain benefits as if you had cast the [[Commune with Nature]] spell."
+      ],
+      "oldText": [
+        "At the end of a Long Rest, you can attune to your surrounding environment. Examples include, but are not limited to: arctic, coast, desert, forest, grassland, mountain, or swamp. While in your attuned environment, you gain the following benefits:",
+        "- You have advantage on Wisdom (Nature) checks related to the local plants, animals, ecosystem, and weather.\n- You find twice as much food when foraging or hunting.\n- You cannot gain the Surprised condition unless you have the Incapacitated condition.\n- You have Advantage on your Initiative rolls so long as you are not surprised or incapacitated."
+      ]
+    },
+    {
+      "id": "alpine-adept",
+      "name": "Alpine Adept",
+      "status": "new",
+      "pillars": [
+        "Exploration",
+        "Combat"
+      ],
+      "group": "Movement Adepts",
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Climb",
+      "tags": [
+        "Climate Adaptation",
+        "Proficiency/Expertise",
+        "Mobility"
+      ],
+      "text": [
+        "You are an expert climber. You gain a 30-foot Climb Speed and Resistance to Bludgeoning damage you take from falling. If you already have a Climb Speed, it increases by 10 feet.",
+        "You gain Expertise in Climb and proficiency in Jump."
+      ],
+      "clarifications": [
+        "Proficiency in Athletics -> Proficiency in Climb.",
+        "Expertise in Athletics -> Expertise in Climb + proficiency in Jump."
+      ],
+      "oldText": [
+        "You are amazingly surefooted. You gain a 30-foot Climb Speed, and you can take a Reaction when you fall to reduce any damage you take from the fall by an amount equal to your Ranger level.",
+        "If you already have a Climb Speed it increases by 10 feet."
+      ]
+    },
+    {
+      "id": "aquatic-adept",
+      "name": "Aquatic Adept",
+      "status": "new",
+      "pillars": [
+        "Exploration",
+        "Combat"
+      ],
+      "group": "Movement Adepts",
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Swim",
+      "tags": [
+        "Climate Adaptation",
+        "Proficiency/Expertise",
+        "Mobility"
+      ],
+      "text": [
+        "You can swim through the water like a native creature of the sea. You gain a Swim Speed of 30 feet, and you can hold your breath for twice as long underwater. If you already have a Swim Speed, it increases by 10 feet.",
+        "You gain Expertise in Swim and proficiency in Endurance."
+      ],
+      "clarifications": [
+        "Proficiency in Athletics -> Proficiency in Swim.",
+        "Expertise in Athletics -> Expertise in Swim + proficiency in Endurance."
+      ],
+      "oldText": [
+        "You can swim through the water like a native creature of the sea. You gain a 30-foot Swim Speed, and while you are underwater, you can hold your breath for up to 1 hour. If you already have a Swim Speed it increases by 10 feet."
+      ]
+    },
+    {
+      "id": "arctic-adept",
+      "name": "Arctic Adept",
+      "status": "updated",
+      "pillars": [
+        "Combat",
+        "Exploration"
+      ],
+      "group": "Climate Adepts",
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Endurance",
+      "tags": [
+        "Climate Adaptation",
+        "Defense"
+      ],
+      "text": [
+        "You have adapted to the frozen tundra. You gain [[rule:Resistance]] to Cold damage, and you add your Ranger level to any skill checks you make related to arctic, snowy, or tundra environments.",
+        "If you fail a saving throw against an effect that deals Cold damage, you can reroll it with a bonus equal to your Ranger level. You must use the new roll, and you can't use this feature again until you finish a Long Rest."
+      ],
+      "oldText": [
+        "You have adapted to the frozen tundra. You gain Resistance to Cold damage. Also, you and up to 10 creatures who travel with you have Advantage on any saving throws they make to resist the hostile effects of arctic environments."
+      ]
+    },
+    {
+      "id": "desert-adept",
+      "name": "Desert Adept",
+      "status": "updated",
+      "pillars": [
+        "Combat",
+        "Exploration"
+      ],
+      "group": "Climate Adepts",
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Endurance",
+      "tags": [
+        "Climate Adaptation",
+        "Defense"
+      ],
+      "text": [
+        "You have adapted arid deserts. You gain [[rule:Resistance]] to Fire damage, and you can add your Ranger level to any skill checks you make related to extreme heat or desert environments.",
+        "If you fail a saving throw against an effect that deals Fire damage, you can reroll it with a bonus equal to your Ranger level. You must use the new roll, and you can't use this feature again until you finish a Long Rest."
+      ],
+      "oldText": [
+        "You have adapted to scorching deserts. You gain Resistance to Fire damage. Also, you and up to 10 creatures who travel with you have Advantage on any saving throws they make to resist the hostile effects of desert environments."
+      ]
+    },
+    {
+      "id": "jungle-adept",
+      "name": "Jungle Adept",
+      "status": "updated",
+      "pillars": [
+        "Combat",
+        "Exploration"
+      ],
+      "group": "Climate Adepts",
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Nature",
+      "tags": [
+        "Climate Adaptation",
+        "Defense"
+      ],
+      "text": [
+        "You have adapted to the jungles. You gain [[rule:Resistance]] to Poison damage, and you can add your Ranger level to any skill checks you make related to jungle environments.",
+        "If you fail a saving throw against an effect that deals Poison damage, you can reroll it with a bonus equal to your Ranger level. You must use the new roll, and you can't use this feature again until you finish a Long Rest."
+      ],
+      "oldText": [
+        "You have adapted to the jungles. You gain Resistance to Poison damage. Also, you and up to 10 creatures who travel with you have Advantage on any saving throws they make to resist the hostile effects of jungle environments."
+      ]
+    },
+    {
+      "id": "planar-adept",
+      "name": "Planar Adept",
+      "status": "updated",
+      "pillars": [
+        "Combat",
+        "Exploration"
+      ],
+      "group": "Climate Adepts",
+      "level": 9,
+      "prereqs": [],
+      "maxRanks": 8,
+      "tags": [
+        "Climate Adaptation",
+        "Defense"
+      ],
+      "text": [
+        "You have adapted to life on one of the great planes of the multiverse. Choose one plane from the table below (or the corresponding plane in your setting). You gain [[rule:Resistance]] to the corresponding damage type, and you can add your Ranger level to any skill checks you make related to that plane.",
+        "If you fail a saving throw against an effect that deals the corresponding damage type, you can reroll it with a bonus equal to your Ranger level. You must use the new roll, and you can't use this feature again until you finish a Long Rest.",
+        "You can learn this Knack more than once, but you must choose a different plane of existence each time you do so."
+      ],
+      "oldText": [
+        "You have adapted to life on one of the great planes of the multiverse. Choose one plane from the table below (or the corresponding plane in your setting). You gain Resistance to the corresponding damage type. Also, you and up to ten creatures who travel with you, have Advantage on saving throws to resist the hostile effects of that plane.",
+        "You can learn this Knack more than once, but you must choose a different plane of existence each time you do so."
+      ],
+      "table": [
+        [
+          "Plane",
+          "Damage"
+        ],
+        [
+          "Astral Sea",
+          "Radiant"
+        ],
+        [
+          "Feywild",
+          "Psychic"
+        ],
+        [
+          "Mechanus",
+          "Force"
+        ],
+        [
+          "Shadowfell",
+          "Necrotic"
+        ],
+        [
+          "Air",
+          "Thunder"
+        ],
+        [
+          "Earth",
+          "Acid"
+        ],
+        [
+          "Fire",
+          "Fire"
+        ],
+        [
+          "Water",
+          "Cold"
+        ]
+      ]
+    },
+    {
+      "id": "slayer-1",
+      "name": "Slayer I",
+      "status": "updated",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 3,
+      "prereqs": [],
+      "prereqSkill": "Track",
+      "tags": [
+        "Proficiency/Expertise",
+        "Hunter's Mark"
+      ],
+      "text": [
+        "When you hit a creature with a weapon attack, you can mark it with your [[spell:Hunter's Mark]] as part of the attack, applying your Hunter's Mark damage bonus and other benefits to the damage roll.",
+        "You gain Expertise in Track."
+      ],
+      "clarifications": [
+        "To mark a creature with your [[spell:Hunter's Mark]], you must cast Hunter's Mark targeting it, or—if the previous target of an ongoing Hunter's Mark dropped to 0 Hit Points before the spell ended—move the mark to the creature."
+      ],
+      "oldText": [
+        "When you hit a creature with a weapon attack you can mark a creature with your Hunter's Mark as part of the attack, applying your Hunter's Mark damage bonus and other benefits to the damage roll."
+      ]
+    },
+    {
+      "id": "slayer-2",
+      "name": "Slayer II",
+      "status": "updated",
+      "pillars": [
+        "Combat",
+        "Exploration"
+      ],
+      "level": 6,
+      "prereqs": [
+        "slayer-1"
+      ],
+      "tags": [
+        "Hunter's Mark",
+        "Tracking"
+      ],
+      "text": [
+        "Your tracking abilities have become supernaturally accurate. You can mark a creature with your [[Hunter's Mark]] by studying signs of its passing, like tracks, left within the past 24 hours.",
+        "Moreover, whenever you make a Search or Track check to locate or track the creature with your Hunter's Mark, you can treat a roll of 7 or lower on the d20 as an 8.",
+        "Also, when your Hunter's Mark would end because its duration expires, it instead lasts until its target drops to 0 Hit Points, you move the mark, or you finish a Long Rest."
+      ],
+      "oldText": [
+        "Your tracking abilities have become supernaturally accurate. You can mark a creature with your [[Hunter's Mark]] by studying signs of its passing, such as tracks, that were left within 24 hours.",
+        "Moreover, whenever you make a Wisdom (Perception) or a Wisdom (Survival) check to locate or track the creature with your Hunter's Mark, you can treat a roll of 7 or lower on the d20 as an 8."
+      ]
+    },
+    {
+      "id": "slayer-3",
+      "name": "Slayer III",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 14,
+      "prereqs": [
+        "slayer-2"
+      ],
+      "tags": [
+        "Hunter's Mark"
+      ],
+      "text": [
+        "Once on each of your turns when you hit a creature marked by your [[Hunter's Mark]] with an attack, you can force it to make a Constitution saving throw against your spell save DC. On a failed save, you choose if it is Blinded, Deafened, unable to speak, or Restrained until the start of your following turn."
+      ],
+      "oldText": [
+        "When you hit a creature marked by your [[Hunter's Mark]] with a weapon attack, you can force it to make a Constitution saving throw against your spell save DC. On a failed save, it has the Blinded, Dazed, Deafened, or Restrained condition (your choice) until the start of your next turn. You can only use this feature once per turn."
+      ]
+    },
+    {
+      "id": "favored-foe",
+      "name": "Favored Foe",
+      "status": "new",
+      "pillars": [
+        "Exploration"
+      ],
+      "level": 3,
+      "prereqs": [],
+      "maxRanks": null,
+      "tags": [
+        "Tracking",
+        "Proficiency/Expertise"
+      ],
+      "text": [
+        "You are especially adept at studying, tracking, and hunting a specific type of enemy. Choose one creature type, two races of Humanoid (such as Gnolls and Orcs), or one organization (like a thieves' guild or an evil cult) as your Favored Foe.",
+        "When you make an ability check to recall knowledge, hunt, or track a Favored Foe, treat a D20 roll of 9 or lower as a 10.",
+        "You can learn this Knack more than once, but you choose a new Favored Foe each time that you learn it."
+      ],
+      "clarifications": [
+        "- Dragons are a creature type.\n- There are a number of organizations you can target in Waterdeep."
+      ]
+    },
+    {
+      "id": "fell-handed-1",
+      "name": "Fell-Handed I",
+      "status": "new",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 6,
+      "prereqs": [],
+      "tags": [
+        "Hunter's Mark",
+        "Critical Hits"
+      ],
+      "text": [
+        "You pour the wrath of the wilds into each strike. Each time you hit the target of your [[spell:Hunter's Mark]] with a weapon attack or Unarmed Strike, your [[rule:Critical Hit]] range against it increases by 1.",
+        "This increase resets when you score a Critical Hit against that creature or before you hit a different creature with an attack benefitting from your Hunter's Mark."
+      ],
+      "clarifications": [
+        "You can forgo benefits from your Hunter's Mark to maintain the increase on another creature.",
+        "**Example.** Assuming you score a critical hit on a natural 20, after you hit your target with one attack, your attacks score a critical hit against it on a roll of 19-20 on the d20. After two hits, a roll of 18-20 on the d20. But, if you score a critical hit on it, it returns to 20 on the d20."
+      ],
+      "oldText": [
+        "When you score a Critical Hit with a weapon attack against a creature, you have Advantage on the next attack you make against that creature before the end of your next turn."
+      ]
+    },
+    {
+      "id": "fell-handed-2",
+      "name": "Fell-Handed II",
+      "status": "new",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 9,
+      "prereqs": [
+        "fell-handed-1"
+      ],
+      "tags": [
+        "Critical Hits"
+      ],
+      "text": [
+        "Your attack rolls with weapons and Unarmed Strikes can score a [[rule:Critical Hit]] on a roll of 19 or 20 on the d20."
+      ],
+      "oldText": [
+        "When you score a [[rule:Critical Hit]] against a creature, your Critical Hit range for attack rolls against that creature expands by 1.",
+        "For example, if you score a Critical Hit against a creature for the first time, you then score a Critical Hit on a roll of 19 or 20 when you make an attack roll against it, and so on."
+      ]
+    },
+    {
+      "id": "stalker-1",
+      "name": "Stalker I",
+      "status": "new",
+      "pillars": [
+        "Exploration"
+      ],
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Hide or Sneak",
+      "tags": [
+        "Proficiency/Expertise",
+        "Stealth"
+      ],
+      "text": [
+        "You are a master at remaining undetected in the wilderness. You have Advantage on Hide checks you make to hide while you are in natural environments.",
+        "You gain Expertise in Hide and Sneak. If you lack proficiency in either, you gain proficiency in that skill instead."
+      ],
+      "oldText": [
+        "You are a master at remaining undetected in the wilderness. You have Advantage on Dexterity (Stealth) checks you make to hide while you are in natural environments."
+      ]
+    },
+    {
+      "id": "stalker-2",
+      "name": "Stalker II",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 3,
+      "prereqs": [
+        "stalker-1"
+      ],
+      "tags": [
+        "Stealth"
+      ],
+      "text": [
+        "You have learned to hunt your prey while remaining unseen. You can take the Hide action as a Bonus Action on your turn."
+      ]
+    },
+    {
+      "id": "stalker-3",
+      "name": "Stalker III",
+      "pillars": [
+        "Exploration"
+      ],
+      "level": 9,
+      "prereqs": [
+        "stalker-2"
+      ],
+      "tags": [
+        "Stealth",
+        "Spells"
+      ],
+      "text": [
+        "You cannot be tracked, even by magic. You are always under the effects of the [[Nondetection]] spell, and you can't be tracked by divination magic or magical means unless you wish to be."
+      ]
+    },
+    {
+      "id": "stalker-4",
+      "name": "Stalker IV",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 14,
+      "prereqs": [
+        "stalker-3"
+      ],
+      "tags": [
+        "Stealth"
+      ],
+      "text": [
+        "Your mythic skill allow you to become undetectable. When you take a [[rule:Hide]] action, you have the [[rule:Invisible]] condition until the start of your next turn. This effect instantly ends if you Cast a Spell, or you attack or force a creature to make an ability check or saving throw."
+      ]
+    },
+    {
+      "id": "trapper-1",
+      "name": "Trapper I",
+      "status": "updated",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 1,
+      "prereqs": [],
+      "tags": [
+        "Crafting"
+      ],
+      "text": [
+        "You craft improvised traps from materials on hand. The improvised Traps you create use the following rules:",
+        "- ***Saving Throws.*** If a trap requires a saving throw, the DC equals 8 plus your Tinkering bonus.",
+        "-  ***Crafting a Trap.*** Over the course of 2 hours, which can be during a Short or Long Rest, you use your Tinkering Tools, natural materials, and 10 feet of [[Rope]] to craft one Trap. It remains usable until the end of your next Long Rest, when it breaks down.",
+        "- ***Setting a Trap.*** As a Utilize Action, you can place one Trap in an adjacent, unoccupied 5-foot space. The first Large or smaller creature that moves into the Trap's space must succeed on a Dexterity saving throw or become Restrained by the Trap.",
+        "  As an Action, the Restrained creature, or a creature within 5 feet, can make a Strength check against your Trap DC. On a success, the creature is freed and the Trap is destroyed.",
+        "- ***Hiding a Trap.*** As a Utilize action (separate from setting it), you can hide a Trap. Creatures have Disadvantage on their saving throws against Traps if they are unaware of them. To detect a hidden Trap, a creature must make a successful Search or Awareness check against your Trap DC.",
+        "You gain 480 Tinkering XP."
+      ],
+      "oldText": [
+        "You can construct natural traps. Over the course of 2 hours, which can be during a Short or Long Rest, you can use a knife, natural materials, and expend 10 feet of rope to craft an improvised Trap, which lasts until the end of your next Long Rest.",
+        "As an Action, you can set one of these Traps in an adjacent unoccupied 5-foot space. The first Large or smaller creature to move into that space must succeed on a Dexterity saving throw against your spell save DC or it has the Restrained condition.",
+        "The target or a creature within reach of it can take an Action to make a Strength (Athletics) check against your spell save DC, ending the condition on it on a success.",
+        "As an Action (separate from setting the Trap), you can hide the Trap. If hidden, a successful Intelligence (Investigation) against your spell save DC is required to detect the Trap."
+      ]
+    },
+    {
+      "id": "survivor-1",
+      "name": "Survivor I",
+      "status": "updated",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 6,
+      "prereqs": [],
+      "tags": [
+        "Healing"
+      ],
+      "text": [
+        "As a Bonus Action, you can spend a number of Hit Point Dice, up to your Proficiency Bonus, to regain Hit Points. For each Hit Point Die you spend in this way, roll the die. You regain Hit Points equal to the total (minimum of 1 Hit Point). You can decide to spend an additional Hit Point Die after each roll. If you take this action in combat, you roll each Hit Point Die with Disadvantage."
+      ],
+      "clarifications": [
+        "Note: when you expend Hit Point Dice during a Rest, you add your Constitution modifier to each roll."
+      ],
+      "oldText": [
+        "As a Bonus Action, you can expend one of your Hit Point Dice, roll the die, and regain a number of Hit Points equal to the roll. If you do so while in combat, you roll the die with Disadvantage."
+      ]
+    },
+    {
+      "id": "survivor-2",
+      "name": "Survivor II",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 9,
+      "prereqs": [
+        "survivor-1"
+      ],
+      "tags": [
+        "Healing"
+      ],
+      "text": [
+        "Your body can rapidly recover from injury. When you expend a Hit Die to regain Hit Points, you regain additional Hit Points equal to your Wisdom modifier (minimum of 1 Hit Point)."
+      ],
+      "clarifications": [
+        "When you expend Hit Dice during a Rest, you would add your Wisdom and Constitution modifier."
+      ]
+    },
+    {
+      "id": "survivor-3",
+      "name": "Survivor III",
+      "status": "updated",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 14,
+      "prereqs": [
+        "survivor-2"
+      ],
+      "tags": [],
+      "text": [
+        "While you have 0 Spirit:",
+        "- You no longer gain Fatigue when taking Bonus Actions or Reactions.\n- When you take an Action, you gain 1 Fatigue instead."
+      ],
+      "oldText": [
+        "When you make a Death Saving Throw, you add your Wisdom modifier to the roll (minimum of +1). If the result of your roll is 20 or higher, it is as if you had rolled a 20 on the d20."
+      ]
+    },
+    {
+      "id": "herbalist-1",
+      "name": "Herbalist I",
+      "status": "new",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Heal",
+      "tags": [
+        "Crafting",
+        "Healing",
+        "Proficiency/Expertise"
+      ],
+      "text": [
+        "You have an extensive knowledge of plants and their healing properties.",
+        "You gain Expertise in Heal, and you automatically succeed on Heal checks made to stabilize creatures with a Foraging Kit.",
+        "You gain 480 Foraging XP."
+      ],
+      "clarifications": [
+        "PCs gain Fatigue to take actions while at 0 Spirit. Stabilizing a PC reduces their Fatigue to 0.",
+        "You can take the Help action to try to stabilize a creature with 0 Spirit, which requires a successful DC 10 Heal check, with the target's DC increasing by an additional 2 for each stabilization since their last Respite."
+      ],
+      "oldText": [
+        "You have an extensive knowledge of plants and their healing properties. You gain proficiency with Herbalism Kits, and you automatically succeed on your Wisdom (Medicine) checks to stabilize creatures at 0 Hit Points if you use an Herbalism Kit."
+      ]
+    },
+    {
+      "id": "herbalist-2",
+      "name": "Herbalist II",
+      "status": "new",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 3,
+      "prereqs": [
+        "herbalist-1"
+      ],
+      "tags": [
+        "Crafting",
+        "Healing"
+      ],
+      "text": [
+        "You have learned to use natural plants and herbs to create healing salves. Over the course of a Long Rest, you can spend 2 hours and a curative reagent using a Foraging Kit to create one [[item:Potion of Healing]] of corresponding rarity, which retains its potency until the end of your next Long Rest.\nIf you Rest in the wilderness, you may treat yourself as having expended a common curative reagent.",
+        "When you use your Foraging Kit to create a Potion of Healing, roll a D100. If you roll less than or equal to your Foraging bonus, the created potion improves by one tier."
+      ],
+      "clarifications": [
+        "You gain Foraging XP equal to the reagent's value when crafting potions in this way, instead of Alchemy XP."
+      ],
+      "oldText": [
+        "You have learned to use natural plants and herbs to create healing salves. Over the course of a Long Rest, you can spend 2 hours using an Herbalism Kit to create an improvised Potion of Healing. These Potions of Healing retain their potency until the end of your next Long Rest, at which point they become inert."
+      ],
+      "table": [
+        [
+          "Reagent Rarity",
+          "Potion"
+        ],
+        [
+          "Common",
+          "[[item:Potion of Healing]]"
+        ],
+        [
+          "Uncommon",
+          "[[item:Potion of Greater Healing]]"
+        ],
+        [
+          "Rare",
+          "[[item:Potion of Superior Healing]]"
+        ],
+        [
+          "Very Rare",
+          "[[item:Potion of Supreme Healing]]"
+        ]
+      ]
+    },
+    {
+      "id": "herbalist-3",
+      "name": "Herbalist III",
+      "status": "new",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 6,
+      "prereqs": [
+        "herbalist-2"
+      ],
+      "tags": [
+        "Healing"
+      ],
+      "text": [
+        "When you use your Foraging Kit to craft Potions of Healing during a Long Rest, you craft additional improvised [[item:Potion of Healing|Potions of Healing]] equal to your Wisdom modifier (minimum of 1)."
+      ],
+      "clarifications": [
+        "The additional potions are common, even if you expend a higher rarity reagent."
+      ],
+      "oldText": [
+        "When you use your Herbalism Kit to craft Potions of Healing during a long rest, you craft a number of improvised Potions of Healing equal to 1 + your Wisdom modifier (minimum of 2)."
+      ]
+    },
+    {
+      "id": "natural-regeneration",
+      "name": "Natural Regeneration",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 3,
+      "prereqs": [],
+      "tags": [
+        "Spells"
+      ],
+      "text": [
+        "During a Short Rest, you can recover spell slots of a combined level equal to your Wisdom modifier (minimum one 1st-level).",
+        "Once you regain spell slots in this way, you must complete a Long Rest before you can use this feature again."
+      ]
+    },
+    {
+      "id": "wild-insight-1",
+      "name": "Wild Insight I",
+      "status": "updated",
+      "pillars": [
+        "Exploration"
+      ],
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Read Person",
+      "tags": [
+        "Nature",
+        "Proficiency/Expertise",
+        "Spells"
+      ],
+      "text": [
+        "You can verbally communicate with and understand Beasts, as if you were always under the effect of a [[Speak with Animals]] spell.",
+        "You gain Expertise in Read Person."
+      ],
+      "clarifications": [
+        "When communicating with a Beast, its awareness and ability to recall knowledge is limited by its Intelligence."
+      ],
+      "oldText": [
+        "You have a special insight into the mannerisms and sounds of wild animals. You can communicate with beasts as if you were always under the effect of a [[Speak with Animals]] spell."
+      ]
+    },
+    {
+      "id": "wild-insight-2",
+      "name": "Wild Insight II",
+      "pillars": [
+        "Exploration"
+      ],
+      "level": 6,
+      "prereqs": [],
+      "tags": [
+        "Nature",
+        "Spells",
+        "Tracking"
+      ],
+      "text": [
+        "You always have the [[Beast Sense]] spell prepared, and you can cast it as a Ritual."
+      ]
+    },
+    {
+      "id": "wild-insight-3",
+      "name": "Wild Insight III",
+      "pillars": [
+        "Exploration"
+      ],
+      "level": 9,
+      "prereqs": [],
+      "tags": [
+        "Nature",
+        "Spells",
+        "Tracking"
+      ],
+      "text": [
+        "You always have the [[Speak with Plants]] spell prepared, and you can cast it as a Ritual, even though it doesn't have the Ritual tag."
+      ]
+    },
+    {
+      "id": "wild-insight-4",
+      "name": "Wild Insight IV",
+      "pillars": [
+        "Exploration"
+      ],
+      "level": 14,
+      "prereqs": [],
+      "tags": [
+        "Nature",
+        "Spells",
+        "Tracking"
+      ],
+      "text": [
+        "You always have the [[Locate Creature]] spell prepared, and you can cast it as a Ritual, even though it doesn't have the Ritual tag."
+      ]
+    },
+    {
+      "id": "wild-insight-5",
+      "name": "Wild Insight V",
+      "pillars": [
+        "Exploration"
+      ],
+      "level": 17,
+      "prereqs": [],
+      "tags": [
+        "Nature",
+        "Spells",
+        "Tracking"
+      ],
+      "text": [
+        "You always have the [[Commune with Nature]] spell prepared, and you can cast it as a Ritual."
+      ]
+    },
+    {
+      "id": "nature-spirit-1",
+      "name": "Nature Spirit I",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 3,
+      "prereqs": [
+        "wild-insight-1"
+      ],
+      "tags": [
+        "Familiar"
+      ],
+      "text": [
+        "Your bond with the wild allows you to conjure bestial spirits. You always have the [[spell:Find Familiar]] spell prepared, but it doesn't count against the spells you prepare each day. When you cast Find Familiar, its creature type is always Fey."
+      ]
+    },
+    {
+      "id": "nature-spirit-2",
+      "name": "Nature Spirit II",
+      "status": "new",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 9,
+      "prereqs": [
+        "nature-spirit-1"
+      ],
+      "tags": [
+        "Familiar"
+      ],
+      "text": [
+        "You always have the [[spell:Battle Familiar]] spell prepared, but it doesn't count against the spells you prepare each day, and you can cast the spell using any spell slots you have.",
+        "You can cast it once without a spell slot. If you do so, after the spell ends, the familiar is dismissed into its pocket dimension and can't be used until you finish a Long Rest."
+      ],
+      "oldText": [
+        "The power of your Fey spirit grows. When you cast [[spell:Find Familiar]], it can take the form of a Beast of CR 1/2 or lower."
+      ]
+    },
+    {
+      "id": "rider-1",
+      "name": "Rider I",
+      "status": "updated",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Handle Animals",
+      "tags": [
+        "Mount",
+        "Proficiency/Expertise"
+      ],
+      "text": [
+        "Any time you make an Handle Animals check to tame, train, or control a mount, you treat any roll of 7 or lower on the d20 as an 8. Also, when you mount or dismount a trained mount, it only costs you 5 feet of movement instead of half.",
+        "You gain Expertise in Handle Animals."
+      ],
+      "clarifications": [
+        "See [[rule:Mounted Combat]]."
+      ],
+      "oldText": [
+        "Whenever you make a Wisdom (Animal Handling) check to control, train, or tame a mount, you can treat a roll of 7 or lower on a d20 as an 8. Also, dismounting from a trained mount only costs you 5 feet of your movement."
+      ]
+    },
+    {
+      "id": "rider-2",
+      "name": "Rider II",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 3,
+      "prereqs": [
+        "rider-1"
+      ],
+      "tags": [
+        "Mount",
+        "Defense"
+      ],
+      "text": [
+        "You gain the [[feat:Mounted Warrior]] Fighting Style, and you can ride trained mounts that are equal to you in size or larger.",
+        "If you already know the Mounted Warrior Fighting Style you learn another Ranger Fighting Style of your choice."
+      ]
+    },
+    {
+      "id": "rider-3",
+      "name": "Rider III",
+      "status": "updated",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 6,
+      "prereqs": [
+        "rider-2"
+      ],
+      "tags": [
+        "Mount",
+        "Defense"
+      ],
+      "text": [
+        "You are a master of mounted combat. When you are riding mount and it is hit by an attack, you can take a Reaction to become the target of that attack instead. Also, if your mount fails a saving throw while you are riding it, you can take a Reaction to add a bonus to the roll, potentially causing it to succeed. The bonus equals your Wisdom modifier (minimum of +1)."
+      ],
+      "oldText": [
+        "You are a master of mounted combat. When you are riding mount and it is hit by an attack, you can take a Reaction to become the target of that attack instead. Also, if your mount is forced to make a saving throw while you are riding it, you can take a Reaction to grant it Advantage on its roll."
+      ]
+    },
+    {
+      "id": "hedge-knight-1",
+      "name": "Hedge Knight I",
+      "status": "updated",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "[13 Strength](Prerequisite: Strength of 13)",
+      "tags": [
+        "Proficiency/Expertise",
+        "Defense"
+      ],
+      "text": [
+        "Though you live in the wilderness you still have some formal military training. You gain [[rule:Armor Training|training]] in Heavy armor, and you learn to speak, read, and write one additional language."
+      ],
+      "oldText": [
+        "Though you live in the wilds you still have some military training. You gain training in Heavy armor."
+      ]
+    },
+    {
+      "id": "hedge-knight-2",
+      "name": "Hedge Knight II",
+      "status": "updated",
+      "pillars": [
+        "Social"
+      ],
+      "level": 3,
+      "prereqs": [
+        "hedge-knight-1"
+      ],
+      "tags": [
+        "Proficiency/Expertise"
+      ],
+      "text": [
+        "Though you are a wanderer you have a basic understanding of chivalry and politics. You learn to speak, read, and write a language of your choice, and you gain proficiency in History, Persuasion, Religion, Culture, or Society.",
+        "Whenever you make an ability check with any of the skills above, you use Wisdom in place of the normal ability score."
+      ],
+      "oldText": [
+        "Though you are a wild wanderer you understand chivalry and politics. Whenever you make an Intelligence (History) or Charisma (Persuasion) check, you can use Wisdom in place of Intelligence or Charisma, respectively."
+      ]
+    },
+    {
+      "id": "student-of-the-wild",
+      "name": "Student of the Wild",
+      "status": "new",
+      "pillars": [
+        "Exploration",
+        "Social"
+      ],
+      "group": "Proficiencies",
+      "level": 1,
+      "prereqs": [],
+      "maxRanks": null,
+      "tags": [
+        "Proficiency/Expertise"
+      ],
+      "text": [
+        "Time in the wild has honed your skills. You gain proficiency in three skills of your choice from the Exploration, Intrigue, Interpersonal, or Lore skill groups.",
+        "You can learn this Knack more than once, but you choose two new skills each time that you learn it."
+      ]
+    },
+    {
+      "id": "trapper-2",
+      "name": "Trapper II",
+      "status": "new",
+      "pillars": [
+        "Combat"
+      ],
+      "level": 6,
+      "prereqs": [],
+      "tags": [
+        "Crafting"
+      ],
+      "text": [
+        "Your skills as a Trapper have grown. So long as you have enough natural material and [[item:Rope]], you can craft up to three Traps in 2 hours, and once you set your Traps, they last for a tenday."
+      ],
+      "oldText": [
+        "Your skills as a Trapper have grown. So long as you have enough natural material and rope, you can craft up to three Traps in 1 hour, and once you set your Traps, they last until triggered or destroyed."
+      ]
+    },
+    {
+      "id": "cavern-adept",
+      "name": "Cavern Adept",
+      "status": "new",
+      "pillars": [
+        "Exploration",
+        "Combat"
+      ],
+      "group": "Climate Adepts",
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Alertness",
+      "tags": [
+        "Sense"
+      ],
+      "text": [
+        "You are especially skilled at navigating the winding tunnels under the earth. You gain Darkvision out to a range of 60 feet. If you already have Darkvision, its range increases by 30 feet.",
+        "As a Bonus Action, you can close your eyes and focus your senses to gain Tremorsense out to a 30-foot radius. You must concentrate on this sense as if concentrating on a spell."
+      ],
+      "clarifications": [
+        "Tremorsense is an [[rule:Imprecise Sense]]."
+      ]
+    },
+    {
+      "id": "urban-adept",
+      "name": "Urban Adept",
+      "status": "new",
+      "pillars": [
+        "Exploration"
+      ],
+      "group": "Climate Adepts",
+      "level": 1,
+      "prereqs": [],
+      "prereqSkill": "Criminal Underworld",
+      "tags": [
+        "Proficiency/Expertise"
+      ],
+      "text": [
+        "Your survival skills are adapted to the seedy underbellies of settlements and civilization. You learn to speak, decode, and leave messages in Thieves' Cant, the language of criminals. Moreover, once you complete a Long Rest in a settlement, you add your Proficiency Bonus to rolls you make to gather information on that settlement's factions, underworld, or any important infamous figures or creatures.",
+        "You gain Expertise in Criminal Underworld."
+      ],
+      "clarifications": [
+        "[[rule:Information Gathering]] will be a downtime activity."
+      ]
+    }
+  ],
+  "spells": [
+    {
+      "name": "Speak with Animals",
+      "source": "PHB'24",
+      "level": 1,
+      "school": "Divination",
+      "castingTime": "Action",
+      "ritual": true,
+      "range": "Self",
+      "components": {
+        "v": true,
+        "s": true
+      },
+      "duration": "10 minutes",
+      "concentration": false,
+      "description": [
+        "For the duration, you can comprehend and verbally communicate with Beasts, and you can use any of the Influence action's skill options with them.",
+        "Most Beasts have little to say about topics that don't pertain to survival or companionship, but at minimum, a Beast can give you information about nearby locations and monsters, including whatever it has perceived within the past day."
+      ]
+    },
+    {
+      "name": "Hunter's Mark",
+      "source": "PHB'24",
+      "level": 1,
+      "school": "Divination",
+      "castingTime": "Bonus Action",
+      "ritual": false,
+      "range": "90 feet",
+      "components": {
+        "v": true
+      },
+      "duration": "1 hour",
+      "concentration": true,
+      "description": [
+        "You magically mark one creature you can see within range as your quarry. Until the spell ends, you deal an extra 1d6 Force damage to the target whenever you hit it with an attack roll. You also have Advantage on any Wisdom (Perception or Survival) check you make to find it.",
+        "If the target drops to 0 Hit Points before this spell ends, you can take a Bonus Action to move the mark to a new creature you can see within range."
+      ],
+      "higherLevels": "Your Concentration can last longer with a spell slot of level 3–4 (up to 8 hours) or 5+ (up to 24 hours)."
+    },
+    {
+      "name": "Find Familiar",
+      "source": "PHB'24",
+      "level": 1,
+      "school": "Conjuration",
+      "castingTime": "1 hour",
+      "ritual": true,
+      "range": "10 feet",
+      "components": {
+        "v": true,
+        "s": true,
+        "m": "burning incense worth 10+ GP, which the spell consumes"
+      },
+      "duration": "Instantaneous",
+      "concentration": false,
+      "description": [
+        "You gain the service of a familiar, a spirit that takes an animal form you choose: Bat, Cat, Frog, Hawk, Lizard, Octopus, Owl, Rat, Raven, Spider, Weasel, or another Beast that has a Challenge Rating of 0. Appearing in an unoccupied space within range, the familiar has the statistics of the chosen form, though it is a Celestial, Fey, or Fiend (your choice) instead of a Beast. Your familiar acts independently of you, but it always obeys your commands.",
+        "***Telepathic Connection.*** While your familiar is within 100 feet of you, you can communicate with it telepathically. Additionally, as a Bonus Action, you can see through the familiar's eyes and hear what it hears until the start of your next turn, gaining the benefits of any special senses it has.",
+        "***Combat.*** The familiar is an ally to you and your allies. It rolls its own Initiative and acts on its own turn. A familiar can't attack, but it can take other actions as normal.",
+        "***Disappearance of the Familiar.*** When the familiar drops to 0 Hit Points, it disappears. It reappears after you cast this spell again. As a Magic action, you can temporarily dismiss the familiar to a pocket dimension. Alternatively, you can dismiss it forever. As a Magic action while it is temporarily dismissed, you can cause it to reappear in an unoccupied space within 30 feet of you. Whenever the familiar drops to 0 Hit Points or disappears into the pocket dimension, it leaves behind in its space anything it was wearing or carrying.",
+        "***One Familiar Only.*** You can't have more than one familiar at a time. If you cast this spell while you have a familiar, you instead cause it to adopt a new eligible form.",
+        "***Touch Spells.*** When you cast a spell with a range of touch, your familiar can deliver the touch. Your familiar must be within 100 feet of you, and it must take a Reaction to deliver the touch when you cast the spell."
+      ],
+      "notes": [
+        "**House Rules**\n- **Tough.** Familiars gain additional Hit Points equal to their conjurer's caster level. \n- **Backlash.** When your familiar is reduced to 0 Hit Points but not killed outright while within 100 feet of you, you can lose Spirit equal to the excess damage to have it drop to 1 Hit Point instead.\n**Rulings**\n-  As a Magic action while it is temporarily dismissed, you can cause it to reappear in an unoccupied space **that you can see** within 30 feet of you.\n**Notes**\n- Familiars are only effective scouts within 100 ft. Beyond that, they are a low Intelligence creature trying its best to follow instructions it remembers from its master, without supervision."
+      ]
+    },
+    {
+      "name": "Beast Sense",
+      "source": "PHB'24",
+      "level": 2,
+      "school": "Divination",
+      "castingTime": "Action",
+      "ritual": true,
+      "range": "Touch",
+      "components": {
+        "s": true
+      },
+      "duration": "1 hour",
+      "concentration": true,
+      "description": [
+        "You touch a willing Beast. For the duration, you can perceive through the Beast's senses as well as your own. When perceiving through the Beast's senses, you benefit from any special senses it has."
+      ]
+    },
+    {
+      "name": "Speak with Plants",
+      "source": "PHB'24",
+      "level": 3,
+      "school": "Transmutation",
+      "castingTime": "Action",
+      "ritual": false,
+      "range": "Self",
+      "area": "30-foot Emanation",
+      "components": {
+        "v": true,
+        "s": true
+      },
+      "duration": "10 minutes",
+      "concentration": false,
+      "description": [
+        "You imbue plants in an immobile 30-foot Emanation with limited sentience and animation, giving them the ability to communicate with you and follow your simple commands. You can question plants about events in the spell's area within the past day, gaining information about creatures that have passed, weather, and other circumstances.",
+        "You can also turn Difficult Terrain caused by plant growth (such as thickets and undergrowth) into ordinary terrain that lasts for the duration. Or you can turn ordinary terrain where plants are present into Difficult Terrain that lasts for the duration.",
+        "The spell doesn't enable plants to uproot themselves and move about, but they can move their branches, tendrils, and stalks for you.",
+        "If a Plant creature is in the area, you can communicate with it as if you shared a common language."
+      ]
+    },
+    {
+      "name": "Nondetection",
+      "source": "PHB'24",
+      "level": 3,
+      "school": "Abjuration",
+      "castingTime": "Action",
+      "ritual": false,
+      "range": "Touch",
+      "components": {
+        "v": true,
+        "s": true,
+        "m": "a pinch of diamond dust worth 25+ GP, which the spell consumes"
+      },
+      "duration": "8 hours",
+      "concentration": false,
+      "description": [
+        "For the duration, you hide a target that you touch from Divination spells. The target can be a willing creature, or it can be a place or an object no larger than 10 feet in any dimension. The target can't be targeted by any Divination spell or perceived through magical scrying sensors."
+      ]
+    },
+    {
+      "name": "Freedom of Movement",
+      "source": "PHB'24",
+      "level": 4,
+      "school": "Abjuration",
+      "castingTime": "Action",
+      "ritual": false,
+      "range": "Touch",
+      "components": {
+        "v": true,
+        "s": true,
+        "m": "a leather strap"
+      },
+      "duration": "1 hour",
+      "concentration": false,
+      "description": [
+        "You touch a willing creature. For the duration, the target's movement is unaffected by Difficult Terrain, and spells and other magical effects can neither reduce the target's Speed nor cause the target to have the Paralyzed or Restrained conditions. The target also has a Swim Speed equal to its Speed.",
+        "In addition, the target can spend 5 feet of movement to automatically escape from nonmagical restraints, such as manacles or a creature imposing the Grappled condition on it."
+      ],
+      "higherLevels": "You can target one additional creature for each spell slot level above 4."
+    },
+    {
+      "name": "Locate Creature",
+      "source": "PHB'24",
+      "level": 4,
+      "school": "Divination",
+      "castingTime": "Action",
+      "ritual": false,
+      "range": "Self",
+      "components": {
+        "v": true,
+        "s": true,
+        "m": "fur from a bloodhound"
+      },
+      "duration": "1 hour",
+      "concentration": true,
+      "description": [
+        "Describe or name a creature that is familiar to you. You sense the direction to the creature's location if that creature is within 1,000 feet of you. If the creature is moving, you know the direction of its movement.",
+        "The spell can locate a specific creature known to you or the nearest creature of a specific kind (such as a human or a unicorn) if you have seen such a creature up close—within 30 feet—at least once. If the creature you described or named is in a different form, such as under the effects of a [[spell:Flesh to Stone]] or [[spell:Polymorph]] spell, this spell doesn't locate the creature.",
+        "This spell can't locate a creature if any thickness of lead blocks a direct path between you and the creature."
+      ]
+    },
+    {
+      "name": "Commune with Nature",
+      "source": "PHB'24",
+      "level": 5,
+      "school": "Divination",
+      "castingTime": "1 minute",
+      "ritual": true,
+      "range": "Self",
+      "components": {
+        "v": true,
+        "s": true
+      },
+      "duration": "Instantaneous",
+      "concentration": false,
+      "description": [
+        "You commune with nature spirits and gain knowledge of the surrounding area. In the outdoors, the spell gives you knowledge of the area within 3 miles of you. In caves and other natural underground settings, the radius is limited to 300 feet. The spell doesn't function where nature has been replaced by construction, such as in castles and settlements.",
+        "Choose three of the following facts; you learn those facts as they pertain to the spell's area:",
+        "- Locations of settlements\n- Locations of portals to other planes of existence\n- Location of one Challenge Rating 10+ creature (DM's choice) that is a Celestial, an Elemental, a Fey, a Fiend, or an Undead\n- The most prevalent kind of plant, mineral, or Beast (you choose which to learn)\n- Locations of bodies of water",
+        "For example, you could determine the location of a powerful monster in the area, the locations of bodies of water, and the locations of any towns."
+      ]
+    },
+    {
+      "name": "Battle Familiar",
+      "source": "AU",
+      "level": 2,
+      "school": "Conjuration",
+      "castingTime": "Action",
+      "ritual": false,
+      "range": "10 feet",
+      "components": {
+        "v": true,
+        "s": true,
+        "m": "a diamond worth 25+ GP"
+      },
+      "duration": "1 hour",
+      "concentration": false,
+      "description": [
+        "You conjure a familiar imbued with magical might. The familiar appears in an unoccupied space within range; resembles an animal of your choice but is a Celestial, Fey, or Fiend (your choice); and uses the [[bestiary:Battle Familiar]] stat block. When you cast this spell, choose the Brute, Flyer, or Stalker form. The choice determines certain details in the stat block.",
+        "***Combat.*** The familiar is an ally to you and your allies. It rolls its own Initiative and acts on its own turn.",
+        "***Disappearance of the Familiar.*** The battle familiar disappears when the spell ends, if it drops to 0 Hit Points, or if you die. When it disappears, it leaves behind in its space anything it was wearing or carrying. If you cast this spell again, you decide whether you summon the familiar that disappeared or a different one.",
+        "***One Familiar at a Time.*** You can't have more than one familiar at a time. If you cast this spell while you already have a familiar from this spell, that familiar is replaced by the new one.",
+        "If you have a familiar from the [[spell:Find Familiar]] spell when you cast this spell, you empower your existing familiar rather than conjuring a new one. For the duration, your familiar can attack in addition to taking other actions as normal, and your familiar's game statistics are replaced by the Battle Familiar stat block, but it retains its creature type, alignment, Hit Points, Hit Point Dice, and any features granted by the Find Familiar spell. Your familiar gains a number of Temporary Hit Points equal to the Hit Points of the battle familiar. Battle Familiar ends early if the familiar has no more Temporary Hit Points left, and these Temporary Hit Points vanish if any remain when Battle Familiar ends. Your familiar reverts to its previous form when Battle Familiar ends."
+      ],
+      "higherLevels": "Use the spell slot's level for the spell's level in the stat block."
+    }
+  ],
+  "items": [
+    {
+      "name": "Potion of Healing",
+      "source": "DMG'24",
+      "type": "Potion",
+      "rarity": "Common",
+      "cost": {
+        "gp": 50
+      },
+      "bulk": "L",
+      "description": [
+        "This potion is a magic item. As a Bonus Action, you can drink it or administer it to another creature within 5 feet of yourself. The creature that drinks the magical red fluid in this vial regains 2d4 + 2 Hit Points. The potion's red liquid glimmers when agitated."
+      ]
+    },
+    {
+      "name": "Potion of Greater Healing",
+      "source": "DMG'24",
+      "type": "Potion",
+      "rarity": "Uncommon",
+      "bulk": "L",
+      "description": [
+        "You regain 4d4 + 4 Hit Points when you drink this potion. The potion's red liquid glimmers when agitated."
+      ]
+    },
+    {
+      "name": "Potion of Superior Healing",
+      "source": "DMG'24",
+      "type": "Potion",
+      "rarity": "Rare",
+      "bulk": "L",
+      "description": [
+        "You regain 8d4 + 8 Hit Points when you drink this potion. The potion's red liquid glimmers when agitated."
+      ]
+    },
+    {
+      "name": "Potion of Supreme Healing",
+      "source": "DMG'24",
+      "type": "Potion",
+      "rarity": "Rare",
+      "bulk": "L",
+      "description": [
+        "You regain 10d4 + 20 Hit Points when you drink this potion. The potion's red liquid glimmers when agitated."
+      ]
+    },
+    {
+      "name": "Common Reagent",
+      "source": "KCG",
+      "type": "Reagent",
+      "rarity": "Common",
+      "cost": {
+        "gp": 15
+      },
+      "bulk": "L",
+      "altBulk": "with Foraging Kit, ignore 10",
+      "description": []
+    },
+    {
+      "name": "Rare Reagent",
+      "source": "KCG",
+      "type": "Reagent",
+      "rarity": "Rare",
+      "cost": {
+        "gp": 200
+      },
+      "bulk": "L",
+      "altBulk": "with Foraging Kit, ignore 10",
+      "description": []
+    },
+    {
+      "name": "Legendary Reagent",
+      "source": "KCG",
+      "type": "Reagent",
+      "rarity": "Legendary",
+      "cost": {
+        "gp": 5000
+      },
+      "bulk": "L",
+      "altBulk": "with Foraging Kit, ignore 10",
+      "description": []
+    },
+    {
+      "name": "Rope",
+      "source": "DMG'24",
+      "type": "Adventuring Gear",
+      "rarity": "Mundane",
+      "cost": {
+        "gp": 1
+      },
+      "bulk": "L",
+      "description": [
+        "As a Utilize action, you can tie a knot with Rope if you succeed on a DC 10 Dexterity (Sleight of Hand) check. The Rope can be burst with a successful DC 20 Strength (Athletics) check.",
+        "You can bind an unwilling creature with the Rope only if the creature has the Grappled, Incapacitated, or Restrained condition. If the creature's legs are bound, the creature has the Restrained condition until it escapes. Escaping the Rope requires the creature to make a successful DC 15 Dexterity (Acrobatics) check as an action."
+      ],
+      "notes": [
+        "Rope is measured in lengths of 50 feet.",
+        "The cost of a continuous rope longer than 50 feet is quadratic (100 feet of rope costs 4x,  150 feet of rope costs 9x, etc). Its weight scales linearly.",
+        "You can only bind an unwilling creature with a Rope of at least 50 feet in length."
+      ]
+    },
+    {
+      "name": "Uncommon Reagent",
+      "source": "KCG",
+      "type": "Reagent",
+      "rarity": "Uncommon",
+      "cost": {
+        "gp": 40
+      },
+      "bulk": "L",
+      "altBulk": "with Foraging Kit, ignore 10",
+      "description": []
+    },
+    {
+      "name": "Very Rare Reagent",
+      "source": "KCG",
+      "type": "Reagent",
+      "rarity": "Very Rare",
+      "cost": {
+        "gp": 2000
+      },
+      "bulk": "L",
+      "altBulk": "with Foraging Kit, ignore 10",
+      "description": []
+    },
+    {
+      "name": "Common Branch",
+      "source": "KCG",
+      "type": "Component",
+      "rarity": "Common",
+      "cost": {
+        "sp": 1
+      },
+      "bulk": "L",
+      "altBulk": "with Woodcutting Kit, ignore 10",
+      "description": [
+        "A component used in crafting.",
+        "Used for Wand Whittling, Woodcarving."
+      ]
+    },
+    {
+      "name": "Uncommon Branch",
+      "source": "KCG",
+      "type": "Component",
+      "rarity": "Uncommon",
+      "cost": {
+        "gp": 25
+      },
+      "bulk": "L",
+      "altBulk": "with Woodcutting Kit, ignore 10",
+      "description": [
+        "A component used in crafting.",
+        "Used for Wand Whittling."
+      ]
+    },
+    {
+      "name": "Rare Branch",
+      "source": "KCG",
+      "type": "Component",
+      "rarity": "Rare",
+      "cost": {
+        "gp": 80
+      },
+      "bulk": "L",
+      "altBulk": "with Woodcutting Kit, ignore 10",
+      "description": [
+        "A component used in crafting.",
+        "Used for Wand Whittling."
+      ]
+    },
+    {
+      "name": "Very Rare Branch",
+      "source": "KCG",
+      "type": "Component",
+      "rarity": "Very Rare",
+      "cost": {
+        "gp": 800
+      },
+      "bulk": "L",
+      "altBulk": "with Woodcutting Kit, ignore 10",
+      "description": [
+        "A component used in crafting.",
+        "Used for Wand Whittling."
+      ]
+    },
+    {
+      "name": "Legendary Branch",
+      "source": "KCG",
+      "type": "Component",
+      "rarity": "Legendary",
+      "cost": {
+        "gp": 2000
+      },
+      "bulk": "L",
+      "altBulk": "with Woodcutting Kit, ignore 10",
+      "description": [
+        "A component used in crafting.",
+        "Used for Wand Whittling."
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "name": "Mounted Combat",
+      "source": "PHB'24",
+      "subtitle": "Core Rule",
+      "text": [
+        "A willing creature that is at least one size larger than a rider and that has an appropriate anatomy can serve as a mount, using the following rules.",
+        "***Mounting and Dismounting.*** During your move, you can mount a creature that is within 5 feet of you or dismount. Doing so costs an amount of movement equal to half your Speed (round down). For example, if your Speed is 30 feet, you spend 15 feet of movement to mount a horse.",
+        "***Controlling a Mount.*** You can control a mount only if it has been trained to accept a rider. Domesticated horses, mules, and similar creatures have such training.",
+        "The Initiative of a controlled mount changes to match yours when you mount it. It moves on your turn as you direct it, and it has only three action options during that turn: Dash, Disengage, and Dodge. A controlled mount can move and act even on the turn that you mount it.",
+        "In contrast, an independent mount—one that lets you ride but ignores your control—retains its place in the Initiative order and moves and acts as it likes.",
+        "***Falling Off.*** If an effect is about to move your mount against its will while you're on it, you must succeed on a DC 10 Dexterity saving throw or fall off, landing with the Prone condition in an unoccupied space within 5 feet of the mount.",
+        "While mounted, you must make the same save if you're knocked Prone or the mount is."
+      ]
+    },
+    {
+      "name": "Charmed",
+      "source": "PHB'24",
+      "subtitle": "Condition",
+      "text": [
+        "While you have the Charmed condition, you experience the following effects.",
+        "***Can't Harm the Charmer.*** You can't attack the charmer or target the charmer with damaging abilities or magical effects.",
+        "***Social Advantage.*** The charmer has Advantage on any ability check to interact with you socially."
+      ]
+    },
+    {
+      "name": "Frightened",
+      "source": "PHB'24",
+      "subtitle": "Condition",
+      "text": [
+        "While you have the Frightened condition, you experience the following effects.",
+        "***Ability Checks and Attacks Affected.*** You have Disadvantage on ability checks and attack rolls while the source of fear is within line of sight.",
+        "***Can't Approach.*** You can't willingly move closer to the source of fear."
+      ]
+    },
+    {
+      "name": "Dash",
+      "source": "PHB'24",
+      "subtitle": "Action",
+      "text": [
+        "When you take the Dash action, you gain extra movement for the current turn. The increase equals your [[rule:Speed]] after applying any modifiers. With a Speed of 30 feet, for example, you can move up to 60 feet on your turn if you Dash. If your Speed of 30 feet is reduced to 15 feet, you can move up to 30 feet this turn if you Dash.",
+        "If you have a special speed, such as a [[rule:Fly Speed]] or [[rule:Swim Speed]], you can use that speed instead of your Speed when you take this action. You choose which speed to use each time you take it."
+      ],
+      "notes": [
+        "**House Rules**\n- You may only Dash once per turn."
+      ]
+    },
+    {
+      "name": "Resistance",
+      "source": "PHB'24",
+      "subtitle": "Core Rule",
+      "text": [
+        "If you have Resistance to a damage type, damage of that type is halved against you (round down). Resistance is applied only once to an instance of damage."
+      ],
+      "notes": [
+        "**House Rule.** If you have multiple sources of Resistance, you reduce damage of that type further, divided by 1 plus the number of sources (rounded down)."
+      ]
+    },
+    {
+      "name": "Critical Hit",
+      "source": "PHB'24",
+      "subtitle": "Core Rule",
+      "text": [
+        "If you roll a 20 on the d20 for an attack roll, you score a Critical Hit, and the attack hits regardless of any modifiers or the target's AC. A Critical Hit lets you roll extra dice for the attack's damage against the target. Roll all of the attack's damage dice twice and add them together. Then add any relevant modifiers."
+      ]
+    },
+    {
+      "name": "Armor Training",
+      "source": "PHB'24",
+      "subtitle": "Core Rule",
+      "text": [
+        "Armor training allows you to use armor of a certain category without the following drawbacks. If you wear Light, Medium, or Heavy armor and lack training with it, you have Disadvantage on any D20 Test that involves Strength or Dexterity, and you can't cast spells. If you use a Shield and lack training with it, you don't gain its AC bonus."
+      ]
+    },
+    {
+      "name": "Unconscious",
+      "source": "PHB'24",
+      "subtitle": "Condition",
+      "text": [
+        "While you have the Unconscious condition, you experience the following effects.",
+        "***Inert.*** You have the [[rule:Incapacitated]] and [[rule:Prone]] conditions, and you drop whatever you're holding. When this condition ends, you remain Prone.",
+        "***Speed 0.*** Your [[rule:Speed]] is 0 and can't increase.",
+        "***Attacks Affected.*** Attack rolls against you have Advantage.",
+        "***Saving Throws Affected.*** You automatically fail Strength and Dexterity saving throws.",
+        "***Automatic Critical Hits.*** Any attack roll that hits you is a [[rule:Critical Hit]] if the attacker is within 5 feet of you.",
+        "***Unaware.*** You're unaware of your surroundings."
+      ]
+    }
+  ],
+  "bestiary": [
+    {
+      "name": "Battle Familiar",
+      "source": "AU",
+      "size": "Medium",
+      "type": "Celestial, Fey, or Fiend",
+      "alignment": {
+        "law": "Neutral",
+        "moral": "Neutral"
+      },
+      "ac": "11 + the spell's level + 2 (Brute only)",
+      "init": "+3",
+      "hp": "30 (Brute only) or 20 (Flyer or Stalker only) + 5 for each spell level above 2",
+      "speed": "40 ft., Fly 30 ft. (hover; Flyer only), Swim 30 ft.",
+      "pb": 2,
+      "abilities": {
+        "str": 16,
+        "dex": 16,
+        "con": 12,
+        "int": 8,
+        "wis": 13,
+        "cha": 10
+      },
+      "immunities": "[[rule:Charmed]], [[rule:Frightened]]",
+      "senses": "Passive Perception 11",
+      "languages": "Understands the languages you know",
+      "traits": [
+        "***Talented.*** Add half the spell's level (round down) to any ability check or saving throw the familiar makes.",
+        "***Flyby (Flyer Only).*** The familiar doesn't provoke [[rule:Opportunity Attacks]] when it flies out of an enemy's reach."
+      ],
+      "actions": [
+        "***Multiattack.*** The familiar makes a number of Rend attacks equal to half this spell's level (round down). The familiar can replace one of these attacks with Prowl if available.",
+        "***Rend. Melee Attack Roll:*** Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d8 + 3 + the spell's level Force damage.",
+        "***Prowl (Stalker Only).*** The familiar moves up to half its Speed without provoking Opportunity Attacks. At the end of this movement, the familiar can take the Hide action."
+      ]
+    }
+  ],
+  "feats": [
+    {
+      "name": "Mounted Warrior",
+      "source": "ARE*|Alternate Ranger Expanded (LaserLlama)",
+      "type": "Fighting Style",
+      "prerequisites": "proficiency in Handle Animals",
+      "text": [
+        "While you are riding a controlled mount, both you and your mount gain a +1 bonus to your Armor Class, and you can use a Bonus Action on each of your turns to command the mount to take one Action or Bonus Action from its stat block or another Action."
+      ]
+    }
+  ]
+}
