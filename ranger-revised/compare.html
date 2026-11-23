@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ranger Revisions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Vollkorn:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #e1e3d4; --paper-2: #f3f3ea; --paper-3: #d2d5c2; --ink: #25332c; --ink-soft: #56645b;
+  --rule: #b3b8a2; --danger: #b3261e; --gain: #237a3b; --focus: #1d5fa8;
+  --shadow: 0 1px 0 rgba(37, 51, 44, .18), 0 3px 10px -4px rgba(37, 51, 44, .35);
+  --del-bg: rgba(179, 38, 30, .11); --del-ink: #a1221a; --ins-bg: rgba(35, 122, 59, .2); --ins-line: #237a3b;
+  --chg-bg: rgba(255, 205, 50, .6); --old-bg: rgba(255, 205, 50, .26); --old-line: rgba(130, 95, 0, .55);
+  --sc-bg: #fdf1dc; --sc-ink: #2b2118; --sc-title: #822000; --sc-edge: #e69a28;
+  --serif: "Vollkorn", "Iowan Old Style", Georgia, serif;
+  --sans: "Alegreya Sans", "Gill Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1b221e; --paper-2: #252e28; --paper-3: #2f3933; --ink: #e2e6da; --ink-soft: #a3ad9f;
+    --rule: #46524a; --danger: #ef6b61; --gain: #6fcf86; --focus: #7fb2ff;
+    --shadow: 0 1px 0 rgba(0,0,0,.4), 0 4px 12px -4px rgba(0,0,0,.6);
+    --del-bg: rgba(239, 107, 97, .17); --del-ink: #f4a199; --ins-bg: rgba(111, 207, 134, .22); --ins-line: #6fcf86;
+    --chg-bg: rgba(255, 205, 50, .32); --old-bg: rgba(255, 205, 50, .13); --old-line: rgba(255, 215, 110, .55);
+    --sc-bg: #2d251b; --sc-ink: #ece0c8; --sc-title: #f0a38a; --sc-edge: #c9821f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1b221e; --paper-2: #252e28; --paper-3: #2f3933; --ink: #e2e6da; --ink-soft: #a3ad9f;
+  --rule: #46524a; --danger: #ef6b61; --gain: #6fcf86; --focus: #7fb2ff;
+  --shadow: 0 1px 0 rgba(0,0,0,.4), 0 4px 12px -4px rgba(0,0,0,.6);
+  --del-bg: rgba(239, 107, 97, .17); --del-ink: #f4a199; --ins-bg: rgba(111, 207, 134, .22); --ins-line: #6fcf86;
+  --chg-bg: rgba(255, 205, 50, .32); --old-bg: rgba(255, 205, 50, .13); --old-line: rgba(255, 215, 110, .55);
+  --sc-bg: #2d251b; --sc-ink: #ece0c8; --sc-title: #f0a38a; --sc-edge: #c9821f;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font: 16px/1.45 var(--sans); font-synthesis: weight style; }
+button, select { font: inherit; color: inherit; }
+strong, b { font-weight: 700; }
+a { color: var(--c, var(--focus)); }
+:focus-visible { outline: 2.5px solid var(--focus); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+/* ---------- top bar ---------- */
+.bar { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding: 12px 20px 10px; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.bar h1 { font: 700 1.55rem/1 var(--serif); margin: 0; }
+.bar .crumb { color: var(--ink-soft); font-size: .93rem; margin-right: auto; }
+.bar .crumb a { color: inherit; }
+.field { display: inline-flex; align-items: center; gap: 8px; font-size: .95rem; color: var(--ink-soft); }
+.field select { border: 1px solid var(--rule); border-radius: 8px; padding: 5px 10px; background: var(--paper-2); color: var(--ink); font-weight: 700; cursor: pointer; }
+.btn { border: 1px solid var(--rule); background: var(--paper-2); border-radius: 8px; padding: 6px 11px; cursor: pointer; font-size: .93rem; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { background: var(--paper-3); }
+.btn svg { width: 18px; height: 18px; }
+.count { font-size: .9rem; color: var(--ink-soft); }
+
+main { max-width: 1680px; margin: 0 auto; padding: 18px 20px 40px; }
+h2.sec { font: 700 1.45rem/1.1 var(--serif); margin: 10px 0 4px; }
+.sec-hint { color: var(--ink-soft); margin: 0 0 14px; font-size: .95rem; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; font-size: .9rem; color: var(--ink-soft); margin: 0 0 16px; }
+.legend span.k { color: var(--ink); padding: 0 5px; border-radius: 3px; }
+
+/* ---------- revision heads ---------- */
+.cols { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 16px; align-items: start; }
+.col { background: var(--paper-2); border-radius: 14px; border-top: 5px solid var(--c); box-shadow: var(--shadow); padding: 14px 14px 4px; min-width: 0; }
+.show { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 12px; font-size: .9rem; color: var(--ink-soft); }
+
+/* ---------- level grid ---------- */
+.lgrid-wrap { margin-top: 16px; overflow-x: auto; border: 1px solid var(--rule); border-radius: 14px; background: var(--paper-2); box-shadow: var(--shadow); }
+.lgrid { --lvw: 3.4rem; display: grid; grid-template-columns: var(--lvw) repeat(var(--cells), minmax(190px, 1fr)); min-width: calc(var(--lvw) + var(--cells) * 190px); }
+.lgrid > * { min-width: 0; }
+.lgrid .corner { grid-row: span 2; position: sticky; left: 0; z-index: 2; background: var(--paper-2); display: flex; align-items: flex-end; justify-content: center; padding: 0 0 7px; font: 700 .75rem/1 var(--sans); text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); }
+.lgrid .h-src { grid-column: span 2; padding: 9px 10px 6px; font: 700 1.12rem/1.1 var(--serif); color: var(--c); border-bottom: 3px solid var(--c); background: color-mix(in srgb, var(--c) 7%, var(--paper-2)); }
+.lgrid .h-cat { padding: 6px 8px; font: 700 .74rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); background: color-mix(in srgb, var(--c) 7%, var(--paper-2)); }
+.lgrid .h-cat small { display: block; font: italic 500 .85rem/1.2 var(--sans); text-transform: none; letter-spacing: 0; color: var(--c); margin-top: 1px; }
+.lgrid .span2 { grid-column: span 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px; }
+.lgrid .span2 > .half { display: grid; gap: 6px; align-content: start; }
+.lgrid .span2 > .cross { grid-column: 1 / -1; }
+/* cross-column trade: a Hunter's Mark feature torn out to pay for a Class Identity one */
+.lgrid .item.cross, .item.cross { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 2px 10px; align-items: start; padding: 8px 10px 9px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--del-bg) 70%, var(--paper)) 0 50%, color-mix(in srgb, var(--ins-bg) 55%, var(--paper)) 50% 100%); }
+.item.cross .side { min-width: 0; }
+.item.cross .side small { display: block; font: 700 .68rem/1.3 var(--sans); text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); }
+.item.cross .old { font-weight: 700; line-height: 1.2; color: var(--del-ink); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.item.cross .new { font-weight: 700; line-height: 1.2; }
+.item.cross .to { align-self: center; font: 700 1.2rem/1 var(--serif); color: var(--ink-soft); }
+.item.cross .sum { grid-column: 1 / -1; margin-top: 4px; }
+.lgrid .lv-cell { position: sticky; left: 0; z-index: 1; background: var(--paper-2); border-top: 1px solid var(--rule); padding: 8px 4px; text-align: center; font: 700 1.3rem/1 var(--serif); font-variant-numeric: tabular-nums; }
+.lgrid .lv-cell small { display: block; font: 700 .62rem/1.3 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); }
+.lgrid .cell { border-top: 1px solid var(--rule); padding: 6px; display: grid; gap: 6px; align-content: start; background: color-mix(in srgb, var(--c) 4%, transparent); }
+.lgrid .first { border-left: 2px solid color-mix(in srgb, var(--c) 45%, var(--rule)); }
+.lgrid .item { display: block; padding: 6px 8px 7px; }
+.lgrid .item .lv { display: block; font-size: .74rem; line-height: 1.3; }
+.lgrid .item .sum { display: block; margin-top: 2px; font-size: .84rem; }
+.item.ghost { opacity: .5; filter: grayscale(1); box-shadow: none; border-style: dashed; background: transparent; }
+.item.ghost:hover { opacity: .8; }
+.item.ghost .sum { display: none; }
+.col-head h3 { font: 700 1.35rem/1.1 var(--serif); margin: 0; color: var(--c); }
+.col-head .by { font-size: .85rem; color: var(--ink-soft); margin: 2px 0 8px; }
+.col-head .blurb { margin: 0 0 8px; font-size: .95rem; }
+.col-head .src-link { font-size: .88rem; font-weight: 700; }
+.budget { margin: 10px 0 14px; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper); }
+.budget summary { cursor: pointer; padding: 7px 12px; font-weight: 700; font-size: .92rem; list-style-position: inside; }
+.budget .bd { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 14px; padding: 0 12px 10px; font-size: .88rem; }
+.budget h5 { margin: 4px 0 2px; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
+.budget h5.take { color: var(--danger); } .budget h5.give { color: var(--gain); }
+.budget ul { margin: 0; padding-left: 1.1em; }
+.budget li { margin-bottom: 3px; }
+.empty-group { color: var(--ink-soft); font-size: .9rem; font-style: italic; margin: 0; }
+
+.item { display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; text-align: left; width: 100%; padding: 8px 10px 9px; border-radius: 10px; cursor: pointer;
+  border: 1.5px solid color-mix(in srgb, var(--c) 35%, var(--rule)); background: var(--paper); box-shadow: var(--shadow); transition: transform .12s, border-color .12s; }
+.item:hover { transform: translateY(-1px); border-color: var(--c); }
+.item .lv { font: 700 .8rem/1.6 var(--sans); color: var(--ink-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.item .top { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; min-width: 0; }
+.item .nm { font-weight: 700; line-height: 1.2; }
+.item .nm .arrow { color: var(--ink-soft); font-weight: 400; }
+.item .sum { grid-column: 1 / -1; font-size: .88rem; color: var(--ink-soft); line-height: 1.35; }
+.pill { display: inline-block; padding: 0 8px; border-radius: 999px; font: 700 .72rem/1.6 var(--sans); letter-spacing: .02em; white-space: nowrap; }
+.pill.new { background: #c9ebd2; color: #0f4a22; }
+.pill.changed { background: #ffe58a; color: #3b2c00; }
+.pill.moved { background: #cfe0f2; color: #133a61; }
+.pill.absorbed { background: #c8e6ea; color: #0e4750; }
+.pill.replaced { background: #f5d2b8; color: #5a2a06; }
+.pill.removed { background: #f4c7c3; color: #6e140e; }
+.pill.renamed { background: #dcdcd2; color: #33382f; }
+.pill.proposed { background: transparent; color: var(--ink-soft); box-shadow: inset 0 0 0 1.5px currentColor; }
+.pill.src { background: var(--c); color: #fff; }
+
+/* ---------- spells ---------- */
+.filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--rule); border-radius: 999px; padding: 3px 12px 3px 9px; background: transparent; cursor: pointer; font-size: .88rem; }
+.chip i { width: 10px; height: 10px; border-radius: 50%; background: var(--c, var(--ink-soft)); }
+.chip[aria-pressed="true"] { background: var(--c, var(--ink)); border-color: var(--c, var(--ink)); color: #fff; }
+.chip[aria-pressed="true"] i { background: #fff; }
+h3.sub { font: 600 1.15rem/1.2 var(--serif); margin: 18px 0 8px; }
+.slist { display: grid; grid-template-columns: 5.2rem repeat(var(--n, 1), minmax(0, 1fr)); border: 1px solid var(--rule); border-radius: 12px; background: var(--paper-2); box-shadow: var(--shadow); overflow: hidden; }
+.slist > div { padding: 7px 12px; border-top: 1px solid var(--rule); min-width: 0; }
+.slist > .hd { border-top: 0; font: 700 1.02rem/1.2 var(--serif); color: var(--c, var(--ink-soft)); border-bottom: 3px solid var(--c, var(--rule)); background: color-mix(in srgb, var(--c, var(--rule)) 7%, var(--paper-2)); }
+.slist > .hd small { display: block; font: 400 .85rem/1.3 var(--sans); color: var(--ink-soft); }
+.slist > .lvl { font: 700 .95rem/1.6 var(--serif); }
+.slist > .src { border-left: 2px solid color-mix(in srgb, var(--c) 45%, var(--rule)); }
+.slist .none { color: var(--ink-soft); font-size: .88rem; }
+.sp-chip { display: inline-block; margin: 2px 5px 2px 0; padding: 1px 8px; border-radius: 6px; font-size: .92rem; line-height: 1.5; border: 0; }
+.sp-chip.add { background: var(--ins-bg); box-shadow: inset 0 -1.5px 0 var(--ins-line); }
+.sp-chip.rem { background: var(--del-bg); color: var(--del-ink); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+button.sp-chip { cursor: pointer; font: inherit; font-size: .92rem; }
+button.sp-chip:hover { outline: 1.5px solid currentColor; }
+.slist-notes { margin: 8px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: .9rem; color: var(--ink-soft); }
+.slist-notes li::before { content: "— "; }
+.sp-level { margin: 0 0 14px; }
+.sp-level h4 { font: 700 .8rem/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); margin: 0 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--rule); }
+.spellgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.spellgrid .item { border-left: 5px solid var(--c); }
+.notes-list { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.notes-list li { font-size: .92rem; color: var(--ink-soft); padding: 6px 12px; border-left: 4px solid var(--c); background: var(--paper-2); border-radius: 0 8px 8px 0; }
+
+footer { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: .85rem; color: var(--ink-soft); }
+footer p { margin: 0 0 6px; }
+
+/* ---------- compare dialog ---------- */
+dialog.cmp { width: min(1180px, calc(100vw - 24px)); max-height: calc(100vh - 24px); padding: 0; border: 0; border-radius: 14px; background: var(--paper); color: var(--ink); box-shadow: 0 24px 60px -20px rgba(0,0,0,.6); overflow: hidden; }
+dialog.cmp[open] { display: flex; flex-direction: column; }
+dialog.cmp::backdrop { background: rgba(20, 28, 24, .5); }
+.cmp-head { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px 10px 20px; border-bottom: 1px solid var(--rule); }
+.cmp-head .t { flex: 1; min-width: 0; }
+.cmp-head .meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 4px; font-size: .85rem; color: var(--ink-soft); }
+.cmp-head h2 { font: 700 1.5rem/1.15 var(--serif); margin: 0 0 4px; }
+.cmp-head .sum { margin: 0; color: var(--ink-soft); }
+.cmp-nav { display: flex; gap: 4px; flex: none; }
+.cmp-nav .btn { padding: 6px 8px; }
+.cmp-body { overflow: auto; padding: 14px 20px 18px; }
+.cmp-body .legend { margin-bottom: 12px; }
+.panes { display: grid; grid-template-columns: repeat(var(--np, 2), minmax(0, 1fr)); gap: 16px; align-items: start; }
+dialog.cmp.wide { width: min(1600px, calc(100vw - 24px)); }
+dialog.cmp.single { width: min(680px, calc(100vw - 24px)); }
+dialog.cmp.single .legend { display: none; }
+.sgroup { display: flex; flex-direction: column; gap: 4px; }
+.sgroup .top { margin-bottom: 2px; }
+.sgroup .sum { padding-left: 8px; border-left: 3px solid var(--c); }
+.sgroup .sum .who { color: var(--c); }
+.pane h3 { font: 700 .78rem/1 var(--sans); text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); margin: 0 0 8px; }
+.pane h3 b { color: var(--c, var(--ink)); }
+.cmp-note { margin: 14px 0 0; padding: 9px 14px; border-radius: 10px; background: var(--paper-2); border-left: 4px solid var(--c); font-size: .93rem; }
+
+/* feature card */
+.fcard { background: var(--paper-2); border-radius: 10px; border: 1px solid var(--rule); border-left: 4px solid var(--c, var(--rule)); padding: 12px 16px 6px; box-shadow: var(--shadow); }
+.fcard h4 { font: 700 1.25rem/1.15 var(--serif); margin: 0 0 2px; }
+.fcard .fsub { font-style: italic; color: var(--ink-soft); margin: 0 0 10px; font-size: .93rem; }
+.fcard p { margin: 0 0 .75em; }
+.fcard ul { margin: 0 0 .75em; padding-left: 1.2em; }
+/* spell card, as in the knack tree */
+.scard { background: var(--sc-bg); color: var(--sc-ink); border-top: 5px solid var(--sc-edge); border-bottom: 5px solid var(--sc-edge); padding: 10px 16px 6px; box-shadow: 0 10px 30px -14px rgba(0,0,0,.5); line-height: 1.4; }
+.scard h4 { font: 600 1.45rem/1.1 var(--serif); font-variant: small-caps; color: var(--sc-title); margin: 0 0 4px; }
+.scard .sc-type { font-style: italic; margin: 0 0 6px; }
+.scard .sc-stats { margin: 0 0 8px; }
+.scard .sc-stats b { font-weight: 500; }
+.scard hr { border: 0; border-top: 3px solid var(--sc-title); margin: 8px 0 10px; }
+.scard p { margin: 0 0 .6em; }
+.absent { margin: 0; padding: 26px 16px; border: 2px dashed var(--rule); border-radius: 10px; text-align: center; color: var(--ink-soft); font-style: italic; }
+
+/* diff marks */
+.d-del, .d-ins, .d-chg { border-radius: 3px; -webkit-box-decoration-break: clone; box-decoration-break: clone; padding: 0 1px; }
+.d-del { background: var(--del-bg); color: var(--del-ink); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.d-ins { background: var(--ins-bg); box-shadow: inset 0 -1.5px 0 var(--ins-line); }
+.d-chg { background: var(--chg-bg); }
+.scard .d-del { color: inherit; }
+
+@media (max-width: 1180px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) {
+  .panes { grid-template-columns: minmax(0, 1fr); }
+  main { padding: 14px 16px 32px; }
+  .bar { padding: 10px 16px; }
+  .budget .bd { grid-template-columns: minmax(0, 1fr); }
+  .cmp-head { padding: 12px 12px 10px 16px; }
+  .cmp-body { padding: 12px 16px 16px; }
+  dialog.cmp { width: calc(100vw - 12px); max-height: calc(100vh - 12px); }
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <h1>Ranger Revisions</h1>
+  <span class="crumb"><a href="knack-tree.html">Knack tree</a> · <a href="../index.html">All pages</a></span>
+  <label class="field">Up to level <select id="lvl"></select></label>
+  <span class="count" id="count"></span>
+  <button class="btn" id="theme" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
+</header>
+<main>
+  <section>
+    <h2 class="sec">Class features</h2>
+    <p class="sec-hint">Every change each revision makes to the 2024 Ranger, lined up by level. A feature that moved sits at the earlier of its two levels, with a grey repeat at the other. A box spanning both columns marks a Hunter's Mark feature torn out to pay for a Class Identity one. Click a change to compare the old and new text side by side.</p>
+    <div class="show" id="show"></div>
+    <div class="cols" id="cols"></div>
+    <div class="lgrid-wrap"><div class="lgrid" id="lgrid"></div></div>
+  </section>
+  <section>
+    <h2 class="sec" style="margin-top:30px">Spells</h2>
+    <p class="sec-hint">Changes to the Ranger spell list, then reworked spells by spell level, each tagged with the revision it comes from.</p>
+    <div class="filters" id="spellFilters"></div>
+    <h3 class="sub">Spell list changes</h3>
+    <div id="spellList"></div>
+    <h3 class="sub">Reworked spells</h3>
+    <div id="spells"></div>
+    <ul class="notes-list" id="spellNotes"></ul>
+  </section>
+  <footer>
+    <p>The left side of each comparison is the 2024 text, unmarked. The right side shows the revision, marked against it: <span class="d-del">removed</span> · <span class="d-ins">new</span> · <span class="d-chg">changed</span>.</p>
+    <p>Before text is the 2024 Ranger. Class features follow the System Reference Document 5.2 by Wizards of the Coast LLC, licensed under CC-BY-4.0. Treantmonk's text comes from his document. twig's text is reconstructed from his video, and his document (linked above) has the exact wording.</p>
+  </footer>
+</main>
+
+<dialog class="cmp" id="cmp" aria-labelledby="cmpTitle">
+  <div class="cmp-head">
+    <div class="t">
+      <div class="meta" id="cmpMeta"></div>
+      <h2 id="cmpTitle"></h2>
+      <p class="sum" id="cmpSum"></p>
+    </div>
+    <div class="cmp-nav">
+      <button class="btn" type="button" id="prev" aria-label="Previous change" title="Previous (←)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button class="btn" type="button" id="next" aria-label="Next change" title="Next (→)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <button class="btn" type="button" id="close" aria-label="Close" title="Close (Esc)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+  </div>
+  <div class="cmp-body">
+    <div class="legend">Marked on the right:<span class="k d-del">Removed</span><span class="k d-ins">New</span><span class="k d-chg">Changed</span></div>
+    <div class="panes" id="panes"></div>
+    <p class="cmp-note" id="cmpNote" hidden></p>
+  </div>
+</dialog>
+
+<script src="compare-data.js"></script>
+<script>
+(() => {
+  const D = window.COMPARE;
+  const SRC = Object.fromEntries(D.sources.map(s => [s.id, s]));
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // [[kind:Name|label]] -> label (or Name); "->" -> arrow.
+  const strip = (s) => String(s ?? "").replace(/\[\[([^\]|]+?)(?:\|([^\]]+))?\]\]/g, (_, n, l) => (l || n.replace(/^\s*(spell|item|rule|bestiary|feat)\s*:\s*/i, "")).trim()).replace(/->/g, "→");
+  const md = (s) => esc(strip(s)).replace(/\*\*\*(.+?)\*\*\*/g, "<strong><em>$1</em></strong>").replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>");
+  const CHANGE = { new: "New", changed: "Changed", moved: "Moved", absorbed: "Now Knacks", replaced: "Replaced", removed: "Removed", renamed: "Renamed", proposed: "Proposed" };
+  const SPELL_UNLOCK = { 1: 1, 2: 5, 3: 9, 4: 13, 5: 17 };   // half-caster spell slot levels
+
+  /* ---------- word diff ---------- */
+  function tokenize(paras) {
+    const out = [];
+    (paras || []).forEach(p => {
+      let s = strip(p), kind = "p";
+      const m = s.match(/^\s*-\s+/); if (m) { kind = "li"; s = s.slice(m[0].length); }
+      out.push({ br: true, kind, k: "¶" });
+      let b = false, i = false, pre = false;
+      s.split(/(\*\*\*|\*\*|\*)/).forEach(seg => {
+        if (seg === "***") { b = !b; i = !i; return; }
+        if (seg === "**") { b = !b; return; }
+        if (seg === "*") { i = !i; return; }
+        seg.split(/(\s+)/).forEach(w => {
+          if (!w) return;
+          if (/^\s+$/.test(w)) { pre = true; return; }
+          out.push({ t: w, k: w, b, i, pre }); pre = false;
+        });
+      });
+    });
+    return out;
+  }
+  function diffRuns(A, B) {
+    const n = A.length, m = B.length, W = m + 1, dp = new Uint16Array((n + 1) * W);
+    for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--)
+      dp[i * W + j] = A[i].k === B[j].k ? dp[(i + 1) * W + j + 1] + 1 : Math.max(dp[(i + 1) * W + j], dp[i * W + j + 1]);
+    const runs = [];
+    const push = (t, a, b) => { let r = runs[runs.length - 1]; if (!r || r.t !== t) { r = { t, a: [], b: [] }; runs.push(r); } if (a != null) r.a.push(a); if (b != null) r.b.push(b); };
+    let i = 0, j = 0;
+    while (i < n && j < m) {
+      if (A[i].k === B[j].k) { push("eq", i++, j++); }
+      else if (dp[(i + 1) * W + j] >= dp[i * W + j + 1]) push("df", i++, null);
+      else push("df", null, j++);
+    }
+    while (i < n) push("df", i++, null);
+    while (j < m) push("df", null, j++);
+    // Soak up tiny islands of shared words ("the", "a") inside a rewrite, so it reads as one change.
+    let merged = true;
+    while (merged) {
+      merged = false;
+      for (let k = 1; k < runs.length - 1; k++) {
+        const r = runs[k], p = runs[k - 1], q = runs[k + 1];
+        if (r.t !== "eq" || p.t !== "df" || q.t !== "df") continue;
+        const len = r.a.length, around = Math.min(p.a.length + p.b.length, q.a.length + q.b.length);
+        if (r.a.some(x => A[x].br)) continue;
+        if (len <= 2 || (len <= 4 && around >= len * 3)) {
+          runs.splice(k - 1, 3, { t: "df", a: [...p.a, ...r.a, ...q.a], b: [...p.b, ...r.b, ...q.b] });
+          merged = true; break;
+        }
+      }
+    }
+    return runs;
+  }
+  // The after text, marked against the before: new words green, rewritten words yellow
+  // (new wording only), and words dropped outright kept in place in red strikethrough.
+  function mergeAfter(A, B) {
+    const toks = [], marks = [];
+    const add = (T, idx, mk) => idx.forEach(x => { toks.push(T[x]); marks.push(T[x].br ? "" : mk); });
+    diffRuns(A, B).forEach(r => {
+      if (r.t === "eq") return add(B, r.b, "");
+      // Words shared at either edge of a change ("You can" | "You may … You can") stay unmarked,
+      // so a pure insertion next to a repeated word still reads as new rather than changed.
+      let a = r.a, b = r.b, pre = 0, suf = 0;
+      while (pre < a.length && pre < b.length && A[a[pre]].k === B[b[pre]].k) pre++;
+      while (suf < a.length - pre && suf < b.length - pre && A[a[a.length - 1 - suf]].k === B[b[b.length - 1 - suf]].k) suf++;
+      add(B, b.slice(0, pre), "");
+      const ca = a.slice(pre, a.length - suf), cb = b.slice(pre, b.length - suf);
+      if (ca.length && cb.length) add(B, cb, "chg");
+      else if (ca.length) add(A, ca, "del");
+      else add(B, cb, "ins");
+      add(B, b.slice(b.length - suf), "");
+    });
+    return [toks, marks];
+  }
+  function render(toks, marks, inline) {
+    const CLS = { ins: "d-ins", chg: "d-chg", del: "d-del" };
+    let html = "", block = "", inList = false, key = null;
+    const closeSpan = () => { if (key !== null) { const [, b, i] = key.split("|"); html += (i === "1" ? "</em>" : "") + (b === "1" ? "</strong>" : "") + "</span>"; key = null; } };
+    const openSpan = (k, cls, b, i) => { html += `<span${cls ? ` class="${cls}"` : ""}>` + (b ? "<strong>" : "") + (i ? "<em>" : ""); key = k; };
+    const closeBlock = () => { closeSpan(); if (block) html += `</${block}>`; block = ""; };
+    toks.forEach((t, idx) => {
+      if (t.br) {
+        if (inline) { if (idx > 0) { closeSpan(); html += " "; } return; }
+        closeBlock();
+        if (t.kind === "li") { if (!inList) { html += "<ul>"; inList = true; } html += "<li>"; block = "li"; }
+        else { if (inList) { html += "</ul>"; inList = false; } html += "<p>"; block = "p"; }
+        return;
+      }
+      const cls = marks[idx] ? CLS[marks[idx]] : "";
+      const k = `${cls}|${t.b ? 1 : 0}|${t.i ? 1 : 0}`;
+      if (k === key) { if (t.pre) html += " "; }
+      else { closeSpan(); if (t.pre) html += " "; openSpan(k, cls, t.b, t.i); }
+      html += esc(t.t);
+    });
+    if (inline) closeSpan(); else { closeBlock(); if (inList) html += "</ul>"; }
+    return html;
+  }
+  // Pair up paragraphs that say roughly the same thing (shared words), so a paragraph
+  // that was dropped or added outright reads as removed/new rather than as a rewrite.
+  const wordset = (toks) => new Set(toks.filter(t => !t.br).map(t => t.k.toLowerCase().replace(/[^\w']/g, "")).filter(Boolean));
+  function sim(a, b) {
+    const A = wordset(a), B = wordset(b); if (!A.size || !B.size) return 0;
+    let n = 0; A.forEach(w => { if (B.has(w)) n++; });
+    return n / (A.size + B.size - n);
+  }
+  function alignParas(PA, PB) {
+    const n = PA.length, m = PB.length, MIN = 0.25;
+    if (n === 1 && m === 1) return [[0, 0]];
+    const S = PA.map(a => PB.map(b => sim(a, b)));
+    const dp = Array.from({ length: n + 1 }, () => new Float64Array(m + 1));
+    for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) {
+      let best = Math.max(dp[i + 1][j], dp[i][j + 1]);
+      if (S[i][j] >= MIN) best = Math.max(best, dp[i + 1][j + 1] + S[i][j]);
+      dp[i][j] = best;
+    }
+    const pairs = []; let i = 0, j = 0;
+    while (i < n && j < m) {
+      if (S[i][j] >= MIN && dp[i][j] === dp[i + 1][j + 1] + S[i][j]) { pairs.push([i, j]); i++; j++; }
+      else if (dp[i + 1][j] >= dp[i][j + 1]) i++; else j++;
+    }
+    return pairs;
+  }
+  // Diff two paragraph lists. The before comes back unmarked; the after carries every mark.
+  // A null before makes the after wholly new; a null after shows the before struck out.
+  function diffPair(pa, pb, inline) {
+    const PA = pa ? pa.map(p => tokenize([p])) : [], PB = pb ? pb.map(p => tokenize([p])) : [];
+    const before = pa ? render(PA.flat(), [], inline) : "";
+    const toks = [], marks = [];
+    const add = (T, mk) => T.forEach(t => { toks.push(t); marks.push(t.br ? "" : mk); });
+    if (!pb) PA.forEach(t => add(t, "del"));
+    else if (!pa) PB.forEach(t => add(t, "ins"));
+    else {
+      let i = 0, j = 0;
+      for (const [pi, pj] of [...alignParas(PA, PB), [PA.length, PB.length]]) {
+        while (i < pi) add(PA[i++], "del");
+        while (j < pj) add(PB[j++], "ins");
+        if (pi < PA.length) { const [t, m] = mergeAfter(PA[i++], PB[j++]); toks.push(...t); marks.push(...m); }
+      }
+    }
+    return [before, pa || pb ? render(toks, marks, inline) : ""];
+  }
+  const line = (s) => (s == null || s === "" ? null : [String(s)]);
+
+  /* ---------- cards ---------- */
+  function featureCards(a, b) {
+    const name = diffPair(a && line(a.name), b && line(b.name), true);
+    const sub = diffPair(a && line(a.sub), b && line(b.sub), true);
+    const body = diffPair(a && a.text, b && b.text, false);
+    const card = (k) => `<div class="fcard"><h4>${name[k]}</h4><p class="fsub">${sub[k]}</p>${body[k]}</div>`;
+    return [a ? card(0) : null, a || b ? card(1) : null];
+  }
+  function spellFields(s) {
+    if (!s) return null;
+    return {
+      name: s.name,
+      type: s.level ? `Level ${s.level} ${s.school}` : `${s.school} Cantrip`,
+      cast: s.castingTime + (s.ritual ? " or Ritual" : ""),
+      range: s.range, comps: s.components,
+      dur: (s.concentration ? "Concentration, " : "") + s.duration,
+      text: [...(s.text || []), ...(s.higher ? [`***Using a Higher-Level Spell Slot.*** ${s.higher}`] : [])]
+    };
+  }
+  function spellCards(a, b) {
+    const A = spellFields(a), B = spellFields(b);
+    const pair = (f) => diffPair(A && line(A[f]), B && line(B[f]), true);
+    const name = pair("name"), type = pair("type"), cast = pair("cast"), range = pair("range"), comps = pair("comps"), dur = pair("dur");
+    const body = diffPair(A && A.text, B && B.text, false);
+    const card = (k) => `<div class="scard"><h4>${name[k]}</h4><p class="sc-type">${type[k]}</p>
+      <div class="sc-stats"><div><b>Casting Time:</b> ${cast[k]}</div><div><b>Range:</b> ${range[k]}</div><div><b>Components:</b> ${comps[k]}</div><div><b>Duration:</b> ${dur[k]}</div></div>
+      <hr>${body[k]}</div>`;
+    return [A ? card(0) : null, A || B ? card(1) : null];
+  }
+  const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  // Spells a revision adds to the list, as items the dialog can open.
+  const LIST_ITEMS = [];
+  D.spellList.forEach(l => Object.entries(l.levels).forEach(([L, e]) => (e.added || []).forEach(n => {
+    const spell = D.listSpells[n]; if (!spell) return;
+    LIST_ITEMS.push({ id: `sl-${l.source}-${slug(n)}`, source: l.source, level: +L, change: "new", listAdd: true, name: n,
+      summary: `Added to the Ranger spell list by ${SRC[l.source].name}.`, before: null, after: spell, note: spell.note });
+  })));
+  // Reworked spells, one group per 2024 spell, with an after for each revision that changes it.
+  const GROUPS = [];
+  D.spells.filter(it => !it.listOnly).forEach(it => {
+    let g = GROUPS.find(x => x.before.name === it.before.name);
+    if (!g) GROUPS.push(g = { id: "sg-" + slug(it.before.name), group: true, level: it.level, before: it.before, entries: [] });
+    g.entries.push(it);
+  });
+  let spellSrc = "all";
+  const srcOk = (id) => spellSrc === "all" || id === spellSrc;
+  const entriesOf = (g) => { const es = g.entries.filter(e => srcOk(e.source)); return es.length ? es : g.entries; };
+
+  const isSpell = (it) => !!(it.entries || it.listAdd || D.spells.includes(it));
+  const nameOf = (it) => {
+    const a = it.before && it.before.name, b = it.after && it.after.name;
+    return a && b && a !== b ? `${esc(a)} <span class="arrow">→</span> ${esc(b)}` : esc(b || a);
+  };
+  const inSpells = isSpell;
+  const levelOf = (it) => inSpells(it) ? (isSpell(it) ? `Spell ${it.level}` : "Spell list") : it.levelFrom ? `Lv ${it.levelFrom} → ${it.level}` : `Lv ${it.level}`;
+  const reach = (it) => isSpell(it) ? (SPELL_UNLOCK[it.level] || 1) : Math.min(it.level, it.levelFrom || 99);
+
+  /* ---------- page ---------- */
+  let maxLevel = 20, order = [];
+  const lvl = $("lvl");
+  for (let l = 1; l <= 20; l++) lvl.insertAdjacentHTML("beforeend", `<option value="${l}"${l === 20 ? " selected" : ""}>${l === 20 ? "20 (all)" : l}</option>`);
+  lvl.addEventListener("change", () => { maxLevel = +lvl.value; draw(); });
+
+  function itemButton(it, ghost) {
+    const s = SRC[it.source];
+    const lv = ghost ? `Repeat · see Lv ${home(it)}` : !inSpells(it) && it.levelFrom ? levelOf(it) : "";
+    return `<button type="button" class="item${ghost ? " ghost" : ""}" data-id="${it.id}" style="--c:${s.color}"${ghost ? ` title="Repeat of the level ${home(it)} entry"` : ""}>
+      ${lv ? `<span class="lv">${lv}</span>` : ""}
+      <span class="top"><span class="nm">${nameOf(it)}</span><span class="pill ${it.change}">${CHANGE[it.change] || it.change}</span>${inSpells(it) ? `<span class="pill src">${esc(s.name)}</span>` : ""}</span>
+      <span class="sum">${md(it.summary)}</span></button>`;
+  }
+  function groupButton(g) {
+    const es = entriesOf(g);
+    return `<button type="button" class="item sgroup" data-id="${g.id}" style="--c:${es.length === 1 ? SRC[es[0].source].color : "var(--ink-soft)"}">
+      <span class="top"><span class="nm">${esc(g.before.name)}</span>${es.map(e => `<span class="pill src" style="--c:${SRC[e.source].color}">${esc(SRC[e.source].name)}</span>`).join("")}</span>
+      ${es.map(e => `<span class="sum" style="--c:${SRC[e.source].color}"><b class="who">${esc(SRC[e.source].name)}${e.after && e.after.name !== g.before.name ? ` → ${esc(e.after.name)}` : ""}</b> <span class="pill ${e.change}">${CHANGE[e.change] || e.change}</span> ${md(e.summary)}</span>`).join("")}</button>`;
+  }
+  // A moved feature lives at the earlier of its two levels, with a grey repeat at the later one.
+  const home = (it) => Math.min(it.level, it.levelFrom || 99);
+  const echo = (it) => it.levelFrom ? Math.max(it.level, it.levelFrom) : null;
+  const CATS = ["hm", "identity"];
+  function crossButton(it) {
+    const s = SRC[it.source];
+    return `<button type="button" class="item cross" data-id="${it.id}" style="--c:${s.color}" title="Hunter's Mark feature replaced by a Class Identity feature">
+      <span class="side"><small>${esc(s.cats.hm[0])} · removed</small><span class="old">${esc(it.before.name)}</span></span>
+      <span class="to" aria-hidden="true">→</span>
+      <span class="side"><small>${esc(s.cats.identity[0])} · added</small><span class="new">${esc(it.after.name)}</span></span>
+      <span class="sum">${md(it.summary)}</span></button>`;
+  }
+  const shownSrc = new Set(D.sources.map(s => s.id));
+
+  $("show").innerHTML = "Show:" + D.sources.map(s => `<button type="button" class="chip" data-show="${s.id}" style="--c:${s.color}" aria-pressed="true"><i></i>${esc(s.name)}</button>`).join("");
+  $("show").addEventListener("click", (e) => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    const id = b.dataset.show;
+    if (shownSrc.has(id)) { if (shownSrc.size > 1) shownSrc.delete(id); } else shownSrc.add(id);
+    $("show").querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", shownSrc.has(c.dataset.show) ? "true" : "false"));
+    draw();
+  });
+
+  function draw() {
+    order = [];
+    const srcs = D.sources.filter(s => shownSrc.has(s.id));
+    const feats = D.features.filter(it => shownSrc.has(it.source));
+    let total = feats.length, shown = 0;
+
+    $("cols").style.setProperty("--n", srcs.length);
+    $("cols").innerHTML = srcs.map(s => `<article class="col" style="--c:${s.color}">
+        <div class="col-head"><h3>${esc(s.name)}</h3><p class="by">${esc(s.by)}</p><p class="blurb">${md(s.blurb)}</p>
+          ${s.link ? `<a class="src-link" href="${esc(s.link)}"${/^https?:/.test(s.link) ? ' target="_blank" rel="noopener"' : ""}>${esc(s.linkLabel)} ↗</a>` : ""}</div>
+        <details class="budget"><summary>Power budget</summary><div class="bd">
+          <div><h5 class="take">Takes from</h5><ul>${s.takes.map(x => `<li>${md(x)}</li>`).join("")}</ul></div>
+          <div><h5 class="give">Gives to</h5><ul>${s.gives.map(x => `<li>${md(x)}</li>`).join("")}</ul></div></div></details></article>`).join("");
+
+    // Level grid: one row per level that has anything, 3 cells per revision.
+    const g = $("lgrid");
+    g.style.setProperty("--cells", srcs.length * 2);
+    let html = `<div class="corner">Lv</div>` + srcs.map(s => `<div class="h-src" style="--c:${s.color}">${esc(s.name)}</div>`).join("")
+      + srcs.map(s => CATS.map((c, k) => `<div class="h-cat${k ? "" : " first"}" style="--c:${s.color}">${esc(s.cats[c][0])}<small>${esc(s.cats[c][1])}</small></div>`).join("")).join("");
+    for (let L = 1; L <= maxLevel; L++) {
+      const here = feats.filter(it => home(it) === L), echoes = feats.filter(it => echo(it) === L);
+      if (!here.length && !echoes.length) continue;
+      html += `<div class="lv-cell"><small>Lv</small>${L}</div>`;
+      srcs.forEach(s => {
+        const pick = (list, c) => list.filter(it => it.source === s.id && it.cat === c);
+        const halves = CATS.map(c => { const main = pick(here, c); order.push(...main); shown += main.length; return main.map(it => itemButton(it)).join("") + pick(echoes, c).map(it => itemButton(it, true)).join(""); });
+        const cross = pick(here, "cross"); order.push(...cross); shown += cross.length;
+        html += cross.length
+          ? `<div class="cell first span2" style="--c:${s.color}">${halves.some(Boolean) ? halves.map(h => `<div class="half">${h}</div>`).join("") : ""}${cross.map(crossButton).join("")}</div>`
+          : halves.map((h, k) => `<div class="cell${k ? "" : " first"}" style="--c:${s.color}">${h}</div>`).join("");
+      });
+    }
+    g.innerHTML = html;
+
+    // Spell list changes: one row per spell level, one column per revision that changes the list.
+    const lists = D.spellList.filter(l => srcOk(l.source));
+    const slots = [1, 2, 3, 4, 5].filter(l => SPELL_UNLOCK[l] <= maxLevel);
+    total += D.spellList.length; shown += lists.length;
+    if (!lists.length) $("spellList").innerHTML = `<p class="empty-group">${spellSrc === "all" ? "No revision" : esc(SRC[spellSrc].name) + " doesn't"} change the spell list.</p>`;
+    else {
+      let h = `<div class="slist" style="--n:${lists.length}"><div class="hd">Spell level</div>`
+        + lists.map(l => `<div class="hd src" style="--c:${SRC[l.source].color}">${esc(SRC[l.source].name)}<small>${md(l.summary)}</small></div>`).join("");
+      slots.forEach(L => {
+        h += `<div class="lvl">Level ${L}</div>`;
+        lists.forEach(l => {
+          const e = l.levels[L] || {};
+          const rem = (e.removed || []).map(r => {
+            const it = r.id && ALL.find(x => x.id === r.id); if (it) order.push(it);
+            return it ? `<button type="button" class="sp-chip rem" data-id="${it.id}" title="Open ${esc(r.name)}">${esc(r.name)}</button>` : `<span class="sp-chip rem">${esc(r.name)}</span>`;
+          });
+          const add = (e.added || []).map(n => {
+            const it = LIST_ITEMS.find(x => x.source === l.source && x.name === n); if (it) order.push(it);
+            return it ? `<button type="button" class="sp-chip add" data-id="${it.id}" title="Open ${esc(n)}">${esc(n)}</button>` : `<span class="sp-chip add">${esc(n)}</span>`;
+          });
+          h += `<div class="src" style="--c:${SRC[l.source].color}">${[...rem, ...add].join("") || `<span class="none">No change</span>`}</div>`;
+        });
+      });
+      h += `</div>` + lists.filter(l => l.notes).map(l => `<ul class="slist-notes">${l.notes.map(n => `<li>${md(n)}</li>`).join("")}</ul>`).join("");
+      $("spellList").innerHTML = h;
+    }
+
+    // Reworked spells, one card per spell (tagged with every revision that changes it), by spell level.
+    const groups = GROUPS.filter(g => g.entries.some(e => srcOk(e.source)) && reach(g) <= maxLevel).sort((x, y) => x.level - y.level || x.before.name.localeCompare(y.before.name));
+    order.push(...groups);
+    shown += groups.reduce((n, g) => n + entriesOf(g).length, 0); total += GROUPS.reduce((n, g) => n + g.entries.length, 0);
+    $("spells").innerHTML = groups.length
+      ? slots.map(L => { const at = groups.filter(g => g.level === L); return at.length ? `<div class="sp-level"><h4>Level ${L} spells</h4><div class="spellgrid">${at.map(groupButton).join("")}</div></div>` : ""; }).join("")
+      : `<p class="empty-group">No reworked spells ${spellSrc === "all" ? "" : "from this revision "}at or below level ${maxLevel}.</p>`;
+    $("spellNotes").innerHTML = D.placeholders.filter(p => spellSrc === "all" || p.source === spellSrc).map(p => `<li style="--c:${SRC[p.source].color}"><b>${esc(SRC[p.source].name)}:</b> ${md(p.text)}</li>`).join("");
+    $("count").textContent = maxLevel < 20 ? `${shown} of ${total} changes` : `${total} changes`;
+  }
+  $("spellFilters").innerHTML = [`<button type="button" class="chip" data-src="all" aria-pressed="true">All</button>`,
+    ...D.sources.map(s => `<button type="button" class="chip" data-src="${s.id}" style="--c:${s.color}" aria-pressed="false"><i></i>${esc(s.name)}</button>`)].join("");
+  $("spellFilters").addEventListener("click", (e) => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    spellSrc = b.dataset.src;
+    $("spellFilters").querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === b ? "true" : "false"));
+    draw();
+  });
+
+  /* ---------- compare dialog ---------- */
+  const dlg = $("cmp"), ALL = [...D.features, ...D.spells, ...LIST_ITEMS, ...GROUPS];
+  let current = null;
+  const pane = (label, html, color) => `<section class="pane"${color ? ` style="--c:${color}"` : ""}><h3>${label}</h3>${html}</section>`;
+  const absent = (t) => `<p class="absent">${esc(t)}</p>`;
+  function open(id) {
+    // Old per-revision spell links (#sp-cordon) open the merged card.
+    const it = GROUPS.find(g => g.entries.some(e => e.id === id)) || ALL.find(x => x.id === id); if (!it) return;
+    current = it;
+    let panes, notes;
+    if (it.entries) {
+      const E = entriesOf(it);
+      dlg.style.setProperty("--c", E.length === 1 ? SRC[E[0].source].color : "var(--ink-soft)");
+      $("cmpMeta").innerHTML = E.map(e => `<span class="pill src" style="--c:${SRC[e.source].color}">${esc(SRC[e.source].name)}</span><span class="pill ${e.change}">${CHANGE[e.change] || e.change}</span>`).join("") + `<span>Spell ${it.level}</span>`;
+      $("cmpTitle").innerHTML = esc(it.before.name);
+      $("cmpSum").innerHTML = E.map(e => E.length > 1 ? `<b style="color:${SRC[e.source].color}">${esc(SRC[e.source].name)}:</b> ${md(e.summary)}` : md(e.summary)).join("<br>");
+      panes = [pane("Before · 2024 PHB", spellCards(it.before, null)[0]),
+        ...E.map(e => pane(`After · <b>${esc(SRC[e.source].name)}</b>`, spellCards(it.before, e.after)[1], SRC[e.source].color))];
+      notes = [...new Set(E.flatMap(e => [e.note, SRC[e.source].note].filter(Boolean).map(n => (E.length > 1 ? `**${SRC[e.source].name}:** ` : "") + n)))];
+    } else {
+      const s = SRC[it.source];
+      dlg.style.setProperty("--c", s.color);
+      $("cmpMeta").innerHTML = `<span class="pill src">${esc(s.name)}</span><span class="pill ${it.change}">${CHANGE[it.change] || it.change}</span><span>${levelOf(it)}</span>`;
+      $("cmpTitle").innerHTML = nameOf(it);
+      $("cmpSum").innerHTML = md(it.summary);
+      // A spell added to the list is unchanged, so it's shown once, as written, with no diff.
+      if (it.listAdd) panes = [pane(`Added to the Ranger spell list · <b>${esc(s.name)}</b>`, spellCards(it.after, null)[0])];
+      else {
+        const [a, b] = isSpell(it) ? spellCards(it.before, it.after) : featureCards(it.before, it.after);
+        panes = [pane("Before · 2024 PHB", a || absent("Not in the 2024 Ranger.")), pane(`After · <b>${esc(s.name)}</b>`, b || absent("Removed."))];
+      }
+      notes = [it.after ? null : it.afterNote, it.note, it.listAdd ? null : s.note].filter(Boolean);
+    }
+    $("panes").style.setProperty("--np", panes.length);
+    dlg.classList.toggle("wide", panes.length > 2);
+    dlg.classList.toggle("single", panes.length === 1);
+    $("panes").innerHTML = panes.join("");
+    $("cmpNote").hidden = !notes.length; $("cmpNote").innerHTML = notes.map(md).join("<br>");
+    const idx = order.indexOf(it);
+    $("prev").disabled = idx <= 0; $("next").disabled = idx < 0 || idx >= order.length - 1;
+    if (!dlg.open) dlg.showModal();
+    dlg.querySelector(".cmp-body").scrollTop = 0;
+    try { history.replaceState(null, "", "#" + id); } catch (e) {}
+  }
+  const step = (d) => { const i = order.indexOf(current); if (i >= 0 && order[i + d]) open(order[i + d].id); };
+  document.addEventListener("click", (e) => { const b = e.target.closest("main .item[data-id], main .sp-chip[data-id]"); if (b) open(b.dataset.id); });
+  $("prev").addEventListener("click", () => step(-1));
+  $("next").addEventListener("click", () => step(1));
+  $("close").addEventListener("click", () => dlg.close());
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener("keydown", (e) => { if (e.key === "ArrowLeft") step(-1); if (e.key === "ArrowRight") step(1); });
+  dlg.addEventListener("close", () => { current = null; try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} });
+
+  /* ---------- theme ---------- */
+  const root = document.documentElement;
+  try { const t = localStorage.getItem("ranger-compare-theme"); if (t) root.dataset.theme = t; } catch (e) {}
+  $("theme").addEventListener("click", () => {
+    const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = dark ? "light" : "dark";
+    try { localStorage.setItem("ranger-compare-theme", root.dataset.theme); } catch (e) {}
+  });
+
+  draw();
+  const fromHash = () => { if (location.hash.length > 1) open(decodeURIComponent(location.hash.slice(1))); };
+  addEventListener("hashchange", fromHash);
+  fromHash();
+})();
+</script>
+</body>
+</html>
