@@ -179,6 +179,8 @@ dialog.cmp::backdrop { background: rgba(20, 28, 24, .5); }
 .cmp-body .legend { margin-bottom: 12px; }
 .panes { display: grid; grid-template-columns: repeat(var(--np, 2), minmax(0, 1fr)); gap: 16px; align-items: start; }
 dialog.cmp.wide { width: min(1600px, calc(100vw - 24px)); }
+dialog.cmp.single { width: min(680px, calc(100vw - 24px)); }
+dialog.cmp.single .legend { display: none; }
 .sgroup { display: flex; flex-direction: column; gap: 4px; }
 .sgroup .top { margin-bottom: 2px; }
 .sgroup .sum { padding-left: 8px; border-left: 3px solid var(--c); }
@@ -634,14 +636,17 @@ dialog.cmp.wide { width: min(1600px, calc(100vw - 24px)); }
       $("cmpMeta").innerHTML = `<span class="pill src">${esc(s.name)}</span><span class="pill ${it.change}">${CHANGE[it.change] || it.change}</span><span>${levelOf(it)}</span>`;
       $("cmpTitle").innerHTML = nameOf(it);
       $("cmpSum").innerHTML = md(it.summary);
-      // A spell added to the list is unchanged, so it shows as written rather than all-green.
-      const [a, b] = it.listAdd ? [null, spellCards(it.after, null)[0]] : isSpell(it) ? spellCards(it.before, it.after) : featureCards(it.before, it.after);
-      panes = [pane("Before · 2024 PHB", a || absent(it.listAdd ? "Not on the 2024 Ranger spell list." : "Not in the 2024 Ranger.")),
-        pane(`${it.listAdd ? "Added" : "After"} · <b>${esc(s.name)}</b>`, b || absent("Removed."))];
+      // A spell added to the list is unchanged, so it's shown once, as written, with no diff.
+      if (it.listAdd) panes = [pane(`Added to the Ranger spell list · <b>${esc(s.name)}</b>`, spellCards(it.after, null)[0])];
+      else {
+        const [a, b] = isSpell(it) ? spellCards(it.before, it.after) : featureCards(it.before, it.after);
+        panes = [pane("Before · 2024 PHB", a || absent("Not in the 2024 Ranger.")), pane(`After · <b>${esc(s.name)}</b>`, b || absent("Removed."))];
+      }
       notes = [it.after ? null : it.afterNote, it.note, it.listAdd ? null : s.note].filter(Boolean);
     }
     $("panes").style.setProperty("--np", panes.length);
     dlg.classList.toggle("wide", panes.length > 2);
+    dlg.classList.toggle("single", panes.length === 1);
     $("panes").innerHTML = panes.join("");
     $("cmpNote").hidden = !notes.length; $("cmpNote").innerHTML = notes.map(md).join("<br>");
     const idx = order.indexOf(it);
