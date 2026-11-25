@@ -56,6 +56,14 @@
       gives: ["Additions to Roving, Tireless, Relentless Hunter, Nature's Veil, Precise Hunter, Feral Senses and Foe Slayer", "Hunter's Mark: longer range, sees invisible targets, and no Concentration from level 3+ slots", "Concentration removed from Ensnaring Strike and Swift Quiver", "Combat boosts deferred to subclasses at levels 7 and 11"],
       note: "Text from Treantmonk's document.",
       cats: { hm: ["Hunter's Mark", "Favored Spells"], identity: ["Class Identity", "Feature Buffs"] }
+    },
+    {
+      id: "d4", name: "d4 Fix", by: "d4: D&D Deep Dive (Colby)", color: "#5e7d1f",
+      blurb: "A minimal house rule: Ranger levels fix Hunter's Mark's Bonus Action cost at 5 and its Concentration at 9. A one-level dip doesn't get either.",
+      takes: ["Nothing, unless you use the optional cost: a Favored Enemy use per free cast"],
+      gives: ["Level 5: no Bonus Action to cast or move Hunter's Mark", "Level 9: no Concentration, so it stacks with Summon Fey, Conjure Animals or Summon Beast"],
+      note: "Reconstructed from a summary of the video. Feature names and exact wording are placeholders.",
+      cats: { hm: ["Hunter's Mark", "Level Scaling"], identity: ["Class Identity", "Unchanged"] }
     }
   ];
 
@@ -222,7 +230,22 @@
       after: f("Nature's Veil", 14, [RAW.veil[0].replace("next turn. ", "next turn. You may extend your Nature's Veil for another round by taking an action to extend it, in which case it lasts until the end of your next turn. You can maintain Nature's Veil for up to 10 minutes. ")]) },
     { id: "tm-feral", source: "tm", group: "util", level: 18, change: "changed", summary: "Blindsight goes from 30 feet to 60 feet.",
       before: f("Feral Senses", 18, RAW.feral),
-      after: f("Feral Senses", 18, ["Your connection to the forces of nature grants you Blindsight with a range of 60 feet."]) }
+      after: f("Feral Senses", 18, ["Your connection to the forces of nature grants you Blindsight with a range of 60 feet."]) },
+
+    /* ---------------- d4: D&D Deep Dive ---------------- */
+    { id: "d4-swift", source: "d4", level: 5, change: "new", summary: "Casting Hunter's Mark and moving it to a new target no longer cost a Bonus Action, like Vow of Enmity.",
+      before: null,
+      after: f("Hunter's Mark Upgrade: Swift Mark", 5, [
+        "Casting [[spell:Hunter's Mark]] no longer takes a Bonus Action: you can cast it as part of the Attack action, the way a Paladin invokes Vow of Enmity. Moving the mark to a new creature also doesn't take an action.",
+        "*Optional cost:* casting it this way expends one use of your Favored Enemy feature."
+      ]),
+      note: "Hunter's Mark is otherwise unchanged. Its 2024 text still says Bonus Action; this feature overrides that for Rangers of level 5 or higher." },
+    { id: "d4-steady", source: "d4", level: 9, change: "new", summary: "Hunter's Mark no longer needs Concentration, but it still ends if you're Incapacitated.",
+      before: null,
+      after: f("Hunter's Mark Upgrade: Steady Mark", 9, [
+        "Your [[spell:Hunter's Mark]] doesn't require Concentration. It ends early if you have the Incapacitated condition."
+      ]),
+      note: "Compare: Ranger Revised's Hunter's Mind (also level 9) lets you concentrate on Hunter's Mark and one other Ranger spell. Treantmonk's Hunter's Mark drops Concentration with a level 3+ slot, which a Ranger also reaches at level 9. twig's Perfected Form (Hunter) does it at level 10." }
   ];
 
   // Column each change sits in on the level grid: Hunter's Mark (and whatever a revision
@@ -231,7 +254,8 @@
   const CAT = {
     hm: ["rr-instinct", "rr-feral5", "rr-mind", "rr-relentless", "rr-vicious",
       "tw-form", "tw-perfected",
-      "tm-fe", "tm-relentless", "tm-precise", "tm-foe"],
+      "tm-fe", "tm-relentless", "tm-precise", "tm-foe",
+      "d4-swift", "d4-steady"],
     cross: ["rr-champion", "tw-landstride", "tw-greaterveil", "tw-primal"]
   };
   features.forEach(it => { it.cat = Object.keys(CAT).find(c => CAT[c].includes(it.id)) || "identity"; });
@@ -404,6 +428,7 @@
 
   const placeholders = [
     { source: "tm", text: "Conjure Barrage and Conjure Volley are unchanged (\"No change necessary\"), but both are on the Favored Enemy list." },
+    { source: "d4", text: "The d4 fix doesn't change any spells. It changes how Hunter's Mark works through Ranger features at levels 5 and 9." },
     { source: "rr", text: "Ranger Revised doesn't change any spells. Some Knacks grant spells (Wild Insight, Nature Spirit), and the knack tree covers those." }
   ];
 
